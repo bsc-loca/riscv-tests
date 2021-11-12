@@ -44,14 +44,30 @@ extern void matmul(const size_t coreid, const size_t ncores, const size_t lda,  
 //
 // all threads start executing thread_entry(). Use their "coreid" to
 // differentiate between threads (each thread is running on a separate core).
-  
-void thread_entry(int cid, int nc)
-{
+
+int main(int argc, char** argv) {
+  int cid;
+  int nc;
    static data_t results_data[ARRAY_SIZE];
 
-   stats(matmul(cid, nc, DIM_SIZE, input1_data, input2_data, results_data); barrier(nc), DIM_SIZE/DIM_SIZE/DIM_SIZE);
- 
-   int res = verify(ARRAY_SIZE, results_data, verify_data);
+  // synchronization variable
+  volatile static uint32_t amo_cnt = 0;
 
-   exit(res);
+  cid = argv[0][0];
+  nc = argv[0][1];
+
+  stats(matmul(cid, nc, DIM_SIZE, input1_data, input2_data, results_data); barrier(nc), DIM_SIZE/DIM_SIZE/DIM_SIZE);
+   
+  int res = verify(ARRAY_SIZE, results_data, verify_data);
+  
+  while(argv[0][0] != amo_cnt);
+  
+  printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
+
+  // increment atomic counter
+  ATOMIC_OP(amo_cnt, 1, add, w);
+
+  return 0;
 }
+
+
