@@ -43,12 +43,20 @@ extern void __attribute__((noinline)) vvadd(int coreid, int ncores, size_t n, co
 //
 // all threads start executing thread_entry(). Use their "coreid" to
 // differentiate between threads (each thread is running on a separate core).
-  
-void thread_entry(int cid, int nc)
+int main(int argc, char** argv)
 {
+   int cid;
+   int nc;
+
+   // synchronization variable
+   volatile static uint32_t amo_cnt = 0;
+
    // static allocates data in the binary, which is visible to both threads
    static data_t results_data[DATA_SIZE];
-   
+ 
+   cid = argv[0][0];
+   nc = argv[0][1];
+
    // First do out-of-place vvadd
    barrier(nc);
    stats(vvadd(cid, nc, DATA_SIZE, input1_data, input2_data, results_data); barrier(nc), DATA_SIZE);
@@ -74,5 +82,14 @@ void thread_entry(int cid, int nc)
    }
    
    barrier(nc);
-   exit(0);
+   
+  while(argv[0][0] != amo_cnt);
+  // assemble number and print
+  printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
+
+  // increment atomic counter
+  ATOMIC_OP(amo_cnt, 1, add, w);
+
+
+   return 0;
 }
