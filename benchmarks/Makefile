@@ -23,14 +23,20 @@ bmarks = \
 	qsort \
 	rsort \
 	towers \
+	towers_int \
 	vvadd \
 	multiply \
 	mm \
 	dhrystone \
 	spmv \
+	spmv_int \
 	mt-vvadd \
 	mt-matmul \
 	pmp \
+	matrix_mult \
+	fibonacci   \
+	histogram   \
+	bubblesort  \
 #--------------------------------------------------------------------
 # Build rules
 #--------------------------------------------------------------------

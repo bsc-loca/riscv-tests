@@ -31,10 +31,15 @@ int main( int argc, char* argv[] )
 #endif
 
   // Do the filter
-  setStats(1);
+  
+  unsigned long cycle = read_csr(mcycle);
+  unsigned long instr = read_csr(minstret); 
+  
   median( DATA_SIZE, input_data, results_data );
-  setStats(0);
-
+  
+  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
+  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
+  
   // Check the results
   return verify( DATA_SIZE, results_data, verify_data );
 }

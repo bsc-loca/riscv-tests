@@ -112,10 +112,14 @@ int main( int argc, char* argv[] )
     return 1;
 #endif
 
+  unsigned long cycle = read_csr(mcycle);
+  unsigned long instr = read_csr(minstret); 
+  
   // Do the sort
-  setStats(1);
   sort(DATA_SIZE, input_data, scratch);
-  setStats(0);
+
+  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
+  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
 
   // Check the results
   return verify( DATA_SIZE, input_data, verify_data );
