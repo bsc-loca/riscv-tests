@@ -67,7 +67,7 @@ sub printArray
   if ( $arrayLen <= $numCols ) {
     print "  ";
     for ( my $i = 0; $i < $arrayLen; $i++ ) {
-      print sprintf("%3.2f",$arrayRef->[$i]);
+      print sprintf("%d",$arrayRef->[$i]);
       if ( $i != $arrayLen-1 ) {
         print ", ";
       }
@@ -81,7 +81,7 @@ sub printArray
       print "  ";
       for ( my $i = 0; $i < $numCols; $i++ ) {
         my $index = $j*$numCols + $i;
-        print sprintf("%3.2f",$arrayRef->[$index]);
+        print sprintf("%d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print ", ";
         }
@@ -93,7 +93,7 @@ sub printArray
       print "  ";
       for ( my $i = 0; $i < ($arrayLen-($numRows*$numCols)); $i++ ) {
         my $index = $numCols*$numRows + $i;
-        print sprintf("%3.2f",$arrayRef->[$index]);
+        print sprintf("%d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print ", ";
         }
@@ -128,10 +128,16 @@ sub main()
   }
 
 
-  print "\n\#define DATA_SIZE ".$opts{"size"}." \n\n";
+  print "\n#ifndef __DATASET_H";
+  print "\n#define __DATASET_H";
+
+  print "\n\n\#define DATA_SIZE ".$opts{"size"}." \n\n";
+    print "\ntypedef int data_t;\n\n";
   printArray( "input1_data", \@values1 );
   printArray( "input2_data", \@values2 );
   printArray( "verify_data", \@sum );
+
+  print "\n#endif //__DATASET_H\n";
 
 }
 

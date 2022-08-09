@@ -62,7 +62,7 @@ int main(int argc, char** argv)
    stats(vvadd(cid, nc, DATA_SIZE, input1_data, input2_data, results_data); barrier(nc), DATA_SIZE);
  
    if(cid == 0) {
-     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
+     int res = verify(DATA_SIZE, results_data, verify_data);
      if(res) exit(res);
    }
 
@@ -77,18 +77,17 @@ int main(int argc, char** argv)
    stats(vvadd(cid, nc, DATA_SIZE, results_data, input2_data, results_data); barrier(nc), DATA_SIZE);
  
    if(cid == 0) {
-     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
+     int res = verify(DATA_SIZE, results_data, verify_data);
      if(res) exit(res);
    }
    
    barrier(nc);
    
-  while(argv[0][0] != amo_cnt);
+  //while(argv[0][0] != amo_cnt);
   // assemble number and print
-  printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
-
+  //printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
   // increment atomic counter
-  ATOMIC_OP(amo_cnt, 1, add, w);
+  //ATOMIC_OP(amo_cnt, 1, add, w);
 
 
    return 0;
