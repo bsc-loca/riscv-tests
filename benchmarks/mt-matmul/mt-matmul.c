@@ -59,6 +59,11 @@ int main(int argc, char** argv) {
   stats(matmul(cid, nc, DIM_SIZE, input1_data, input2_data, results_data); barrier(nc), DIM_SIZE/DIM_SIZE/DIM_SIZE);  
  
   int res = verify(ARRAY_SIZE, results_data, verify_data);
+
+  if(cid==0)
+  {
+      if (res!=0) printf("Error \n"); 
+  }
  
   //while(argv[0][0] != amo_cnt);
   //printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
