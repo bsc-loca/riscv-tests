@@ -2,7 +2,7 @@
 #include <sys/times.h>
 
 #include "util.h"
-#include "dataset1.h"
+#include "dataset.h"
 
 int main (void)  {
     int i, j;          

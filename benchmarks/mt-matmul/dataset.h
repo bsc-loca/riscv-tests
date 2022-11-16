@@ -7,7 +7,7 @@
 #define DIM_SIZE 64 
 
 
-typedef int data_t;static data_t input1_data[ARRAY_SIZE] = 
+typedef double data_t;static data_t input1_data[ARRAY_SIZE] = 
 {
     0,   3,   2,   0,   3,   1,   0,   3,   2,   3,   2,   0,   3,   3,   1,   2,   3,   0,   0,   1, 
     1,   1,   2,   3,   1,   2,   3,   1,   1,   3,   2,   2,   0,   1,   3,   2,   2,   2,   0,   0, 
