@@ -23,8 +23,7 @@
 // This is the number of discs in the puzzle.
 
 #define NUM_DISCS  7
-
-#define NUMBER_OF_RUNS		10 /* Default number of runs */
+#define NUMBER_OF_RUNS 40 /* Default number of runs */
 
 //--------------------------------------------------------------------------
 // List data structure and functions
@@ -282,12 +281,13 @@ int main( int argc, char* argv[] ) {
     //---------------------------------------------------------
     // ROI
     for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index){
+        towers_clear( &towers );
         towers_solve( &towers );
     }
     //---------------------------------------------------------
 
-
-    printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
+     
+    printf("\nCycles:  %d \n",read_csr(mcycle) - cycle);
     printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
 
 #if HOST_DEBUG
