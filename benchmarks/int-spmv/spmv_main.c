@@ -1,23 +1,21 @@
 // See LICENSE for license details.
 
 //**************************************************************************
-// Double-precision sparse matrix-vector multiplication benchmark
+// Double-precision general matrix multiplication benchmark
 //--------------------------------------------------------------------------
 
 #include "util.h"
 
 //--------------------------------------------------------------------------
-// Input/Reference Data
-
 #include "dataset1.h"
 
-void spmv(int r, const double* val, const int* idx, const double* x,
-          const int* ptr, double* y)
+void spmv(int r, const long* val, const int* idx, const long* x,
+          const int* ptr, long* y)
 {
   for (int i = 0; i < r; i++)
   {
     int k;
-    double yi0 = 0, yi1 = 0, yi2 = 0, yi3 = 0;
+    long yi0 = 0, yi1 = 0, yi2 = 0, yi3 = 0;
     for (k = ptr[i]; k < ptr[i+1]-3; k+=4)
     {
       yi0 += val[k+0]*x[idx[k+0]];
@@ -35,18 +33,24 @@ void spmv(int r, const double* val, const int* idx, const double* x,
 
 //--------------------------------------------------------------------------
 // Main
+//--------------------------------------------------------------------------
 
-int main( int argc, char* argv[] )
-{
-  double y[R];
+int main( int argc, char* argv[] ) {
+    long y[R];
 
 #if PREALLOCATE
-  spmv(R, val, idx, x, ptr, y);
+    spmv(R, val, idx, x, ptr, y);
 #endif
-
-  setStats(1);
+    
+  roi_start(); 
+  //-----------------
+  // ROI
   spmv(R, val, idx, x, ptr, y);
-  setStats(0);
+  //-----------------
+  roi_end(); 
+  print_metrics("int-spmv");
 
-  return verifyDouble(R, y, verify_data);
+  // Check the results
+  return verify(R, y, verify_data);
+
 }

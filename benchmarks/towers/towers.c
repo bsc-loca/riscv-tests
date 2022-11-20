@@ -274,10 +274,7 @@ int main( int argc, char* argv[] ) {
     towers_solve( &towers );
 #endif
 
-
-    unsigned long cycle = read_csr(mcycle);
-    unsigned long instr = read_csr(minstret); 
-    
+    roi_start(); 
     //---------------------------------------------------------
     // ROI
     for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index){
@@ -285,10 +282,9 @@ int main( int argc, char* argv[] ) {
         towers_solve( &towers );
     }
     //---------------------------------------------------------
+    roi_end(); 
+    print_metrics("towers");
 
-     
-    printf("\nCycles:  %d \n",read_csr(mcycle) - cycle);
-    printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
 
 #if HOST_DEBUG
     towers_print( &towers );

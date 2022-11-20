@@ -1,22 +1,30 @@
 // See LICENSE for license details.
 
 //**************************************************************************
-// Median filter bencmark
+// Vector-vector add benchmark
 //--------------------------------------------------------------------------
 //
-// This benchmark performs a 1D three element median filter. The
-// input data (and reference data) should be generated using the
-// median_gendata.pl perl script and dumped to a file named
-// dataset1.h.
-
+// This benchmark uses adds to vectors and writes the results to a
+// third vector. The input data (and reference data) should be
+// generated using the vvadd_gendata.pl perl script and dumped
+// to a file named dataset1.h.
+ 
 #include "util.h"
-
-#include "median.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
 #include "dataset1.h"
+
+//--------------------------------------------------------------------------
+// vvadd function
+
+void vvadd( int n, int a[], int b[], int c[] )
+{
+  int i;
+  for ( i = 0; i < n; i++ )
+    c[i] = a[i] + b[i];
+}
 
 //--------------------------------------------------------------------------
 // Main
@@ -27,19 +35,14 @@ int main( int argc, char* argv[] )
 
 #if PREALLOCATE
   // If needed we preallocate everything in the caches
-  median( DATA_SIZE, input_data, results_data );
+  vvadd( DATA_SIZE, input1_data, input2_data, results_data );
 #endif
 
-  // Do the filter
-  
-  unsigned long cycle = read_csr(mcycle);
-  unsigned long instr = read_csr(minstret); 
-  
-  median( DATA_SIZE, input_data, results_data );
-  
-  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
-  
+  roi_start(); 
+  vvadd( DATA_SIZE, input1_data, input2_data, results_data );
+  roi_end(); 
+  print_metrics("int-vvadd");
+
   // Check the results
   return verify( DATA_SIZE, results_data, verify_data );
 }

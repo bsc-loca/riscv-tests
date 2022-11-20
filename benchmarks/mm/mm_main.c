@@ -8,7 +8,7 @@
 
 #pragma GCC optimize ("unroll-loops")
 
-void thread_entry(int cid, int nc)
+void main(int cid, int nc)
 {
   const int R = 8;
   int m, n, p;

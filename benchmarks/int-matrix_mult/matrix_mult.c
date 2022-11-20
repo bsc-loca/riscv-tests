@@ -42,19 +42,14 @@ int main() {
    
     InitSeed();
 
-    unsigned long cycle = read_csr(mcycle);
-    unsigned long instr = read_csr(minstret); 
-
-
+    roi_start(); 
     //--------------------------------------------------
     // ROI
     Test(ArrayA, ArrayB, ResultArray);
     //--------------------------------------------------
+    roi_end(); 
+    print_metrics("fd-matrix_mult");
 
-
-    printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-    printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
-    
 
     return 0; 
 }

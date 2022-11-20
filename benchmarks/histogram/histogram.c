@@ -12,9 +12,6 @@ int core_data_lenght;
 
 int main(int argc, char** argv) {
 
-    //printf("\n   *** HISTOGRAM BENCHMARK TEST ***\n");
-    //printf("   N = %d \n", DATA_SIZE);
-
     // get the number of hardware cores we have available in the system
     //cores_count = get_core_count();
     cores_count = 1;
@@ -34,20 +31,17 @@ int main(int argc, char** argv) {
     int begining = coreID * core_data_lenght;
     int ending = (coreID + 1) * core_data_lenght;
 
-
-    unsigned long cycle = read_csr(mcycle);
-    unsigned long instr = read_csr(minstret); 
-
+    roi_start();    
     //-------------------------
     // ROI
 	for(int x=begining; x<ending; x++){
 		histogram[data[x]] += 1;
 	}
     //-------------------------
+    roi_end();    
+    print_metrics("histogram");
 
 
-    printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-    printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
     
     // synchronize the cores execution
     //barrier(cores_count);
@@ -55,10 +49,11 @@ int main(int argc, char** argv) {
     // put the core except the 0 to idle mode
     //_core_idle_(coreID);
 
-    printf("Output : ");
-
-    for (int x=0; x<16; x++) printf("%u:%u,", x, histogram[x]);
-    printf("\n");
-
-    return 0;
+    int cnt = 0;
+    for (int x=0; x<16; x++) cnt=cnt+histogram[x];
+    
+    if(cnt != DATA_SIZE) {
+        printf("Error: Only %d were counted. \n", cnt);
+        return 1;
+    } else return 0;
 }

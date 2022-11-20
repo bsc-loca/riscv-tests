@@ -33,16 +33,14 @@ int main( int argc, char* argv[] )
   }
 #endif
   
-  unsigned long cycle = read_csr(mcycle);
-  unsigned long instr = read_csr(minstret); 
-  
+  roi_start();  
   for (i = 0; i < DATA_SIZE; i++)
   {
     results_data[i] = multiply( input_data1[i], input_data2[i] );
   }
-  
-  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
+  roi_end(); 
+  print_metrics("int-multiply");
+
   
   // Check the results
   return verify( DATA_SIZE, results_data, verify_data );

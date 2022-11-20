@@ -116,10 +116,11 @@ int main( int argc, char* argv[] )
   unsigned long instr = read_csr(minstret); 
   
   // Do the sort
+  roi_start(); 
   sort(DATA_SIZE, input_data, scratch);
+  roi_end(); 
+  print_metrics("rsort");
 
-  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
 
   // Check the results
   return verify( DATA_SIZE, input_data, verify_data );

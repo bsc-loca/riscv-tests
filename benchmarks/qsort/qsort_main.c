@@ -143,14 +143,11 @@ int main( int argc, char* argv[] )
     return 1;
 #endif
 
-  // Do the sort
-  unsigned long cycle = read_csr(mcycle);
-  unsigned long instr = read_csr(minstret); 
-  
+  roi_start(); 
   sort( DATA_SIZE, input_data );
-  
-  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
+  roi_end(); 
+  print_metrics("qsort");
+ 
   
   // Check the results
   return verify( DATA_SIZE, input_data, verify_data );

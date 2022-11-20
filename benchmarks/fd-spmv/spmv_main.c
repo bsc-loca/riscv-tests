@@ -1,21 +1,23 @@
 // See LICENSE for license details.
 
 //**************************************************************************
-// Double-precision general matrix multiplication benchmark
+// Double-precision sparse matrix-vector multiplication benchmark
 //--------------------------------------------------------------------------
 
 #include "util.h"
 
 //--------------------------------------------------------------------------
+// Input/Reference Data
+
 #include "dataset1.h"
 
-void spmv(int r, const long* val, const int* idx, const long* x,
-          const int* ptr, long* y)
+void spmv(int r, const double* val, const int* idx, const double* x,
+          const int* ptr, double* y)
 {
   for (int i = 0; i < r; i++)
   {
     int k;
-    long yi0 = 0, yi1 = 0, yi2 = 0, yi3 = 0;
+    double yi0 = 0, yi1 = 0, yi2 = 0, yi3 = 0;
     for (k = ptr[i]; k < ptr[i+1]-3; k+=4)
     {
       yi0 += val[k+0]*x[idx[k+0]];
@@ -33,29 +35,19 @@ void spmv(int r, const long* val, const int* idx, const long* x,
 
 //--------------------------------------------------------------------------
 // Main
-//--------------------------------------------------------------------------
 
-int main( int argc, char* argv[] ) {
-    long y[R];
-
+int main( int argc, char* argv[] )
+{
+  double y[R];
 
 #if PREALLOCATE
-    spmv(R, val, idx, x, ptr, y);
+  spmv(R, val, idx, x, ptr, y);
 #endif
 
-  unsigned long cycle = read_csr(mcycle);
-  unsigned long instr = read_csr(minstret); 
-    
-  //-----------------
-  // ROI
+  roi_start(); 
   spmv(R, val, idx, x, ptr, y);
-  //-----------------
+  roi_end(); 
+  print_metrics("fd-spmv");
 
-  printf("Cycles:  %d \n",read_csr(mcycle) - cycle);
-  printf("Instructions:  %d \n\n",read_csr(minstret) - instr);
-    
-
-  // Check the results
-  return verify(R, y, verify_data);
-
+  return verifyDouble(R, y, verify_data);
 }

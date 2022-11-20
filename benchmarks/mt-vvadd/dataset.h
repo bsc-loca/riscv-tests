@@ -5,7 +5,7 @@
 #define DATA_SIZE 4096 
 
 
-typedef int data_t;
+typedef double data_t;
 
 static data_t input1_data[DATA_SIZE] = 
 {
