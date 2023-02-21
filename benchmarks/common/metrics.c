@@ -1,4 +1,6 @@
 #include "util.h"
+#include "metrics.h"
+#include <stdio.h>
 
 uint64_t _cycles ;
 uint64_t _instructions ; 
@@ -15,7 +17,7 @@ uint32_t roi_end (void){
     return 0; 
 }
 
-uint32_t print_metrics (char test_name ){
+uint32_t print_metrics (char *test_name ){
     printf("\n");
     printf("--  %s  -- \n",test_name);
     printf("Cycles:  %d \n", _cycles);

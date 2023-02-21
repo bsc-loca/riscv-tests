@@ -12,6 +12,7 @@
 #include "util.h"
 
 #include "multiply.h"
+#include "metrics.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data

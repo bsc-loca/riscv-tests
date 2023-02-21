@@ -62,7 +62,7 @@ int main(int argc, char** argv)
    stats(vvadd(cid, nc, DATA_SIZE, input1_data, input2_data, results_data); barrier(nc), DATA_SIZE);
  
    if(cid == 0) {
-     int res = verify(DATA_SIZE, results_data, verify_data);
+     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
      if(res) exit(res);
    }
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
    stats(vvadd(cid, nc, DATA_SIZE, results_data, input2_data, results_data); barrier(nc), DATA_SIZE);
  
    if(cid == 0) {
-     int res = verify(DATA_SIZE, results_data, verify_data);
+     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
      if(res) exit(res);
    }
    

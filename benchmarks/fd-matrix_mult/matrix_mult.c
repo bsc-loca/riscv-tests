@@ -16,6 +16,9 @@
 #include <sys/times.h>
 #include "util.h"
 
+#include "metrics.h"
+#include <stdio.h>
+
 
 /*
  * MATRIX MULTIPLICATION BENCHMARK PROGRAM:

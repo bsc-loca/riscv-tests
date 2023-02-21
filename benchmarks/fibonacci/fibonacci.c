@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/times.h>
 #include "util.h"
+#include "metrics.h"
 
 
 #define N 25

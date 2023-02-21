@@ -13,6 +13,7 @@
 #include "util.h"
 #include <string.h>
 #include <limits.h>
+#include "metrics.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data
@@ -108,7 +109,7 @@ int main( int argc, char* argv[] )
 #if PREALLOCATE
   // If needed we preallocate everything in the caches
   sort(DATA_SIZE, verify_data, scratch);
-  if (verify(DATA_SIZE, input_data, input_data))
+  if (verify_int(DATA_SIZE, input_data, input_data))
     return 1;
 #endif
 
@@ -123,5 +124,5 @@ int main( int argc, char* argv[] )
 
 
   // Check the results
-  return verify( DATA_SIZE, input_data, verify_data );
+  return verify_int( DATA_SIZE, input_data, verify_data );
 }

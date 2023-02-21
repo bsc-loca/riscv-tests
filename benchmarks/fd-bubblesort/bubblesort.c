@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <sys/times.h>
+#include <stdio.h>
 
+#include "metrics.h"
 #include "util.h"
 #include "dataset.h"
 
@@ -22,7 +24,7 @@ int main (void)  {
     } 
     //----------------------------------------------------------
     roi_end(); 
-    print_metrics("fibonacci");
+    print_metrics("fd-bubblesort");
 
                     
 	int error=0;                

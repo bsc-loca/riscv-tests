@@ -10,6 +10,7 @@
 // to a file named dataset1.h.
  
 #include "util.h"
+#include "metrics.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data
@@ -44,5 +45,5 @@ int main( int argc, char* argv[] )
   print_metrics("int-vvadd");
 
   // Check the results
-  return verify( DATA_SIZE, results_data, verify_data );
+  return verify_int( DATA_SIZE, results_data, verify_data );
 }

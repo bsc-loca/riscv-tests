@@ -19,6 +19,7 @@
 // the HOST_DEBUG and PREALLOCATE macros for your timing run.
 
 #include "util.h"
+#include "metrics.h"
 
 // This is the number of discs in the puzzle.
 

@@ -1,7 +1,9 @@
 #include <sys/types.h>
 #include <sys/times.h>
+#include <stdio.h>
 
 #include "util.h"
+#include "metrics.h"
 
 #include "dataset1.h"
 

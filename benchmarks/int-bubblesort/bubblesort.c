@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <sys/times.h>
+#include <stdio.h>
 
+#include "metrics.h"
 #include "util.h"
 #include "dataset.h"
 

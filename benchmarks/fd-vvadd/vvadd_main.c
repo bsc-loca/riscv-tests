@@ -10,6 +10,7 @@
 // to a file named dataset1.h.
  
 #include "util.h"
+#include "metrics.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data

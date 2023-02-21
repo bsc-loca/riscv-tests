@@ -12,6 +12,7 @@
 #include "util.h"
 
 #include "multiply.h"
+#include "metrics.h"
 
 //--------------------------------------------------------------------------
 // Input/Reference Data
@@ -43,5 +44,5 @@ int main( int argc, char* argv[] )
 
   
   // Check the results
-  return verify( DATA_SIZE, results_data, verify_data );
+  return verify_int( DATA_SIZE, results_data, verify_data );
 }
