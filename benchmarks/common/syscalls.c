@@ -32,6 +32,7 @@
 #include <limits.h>
 #include <sys/signal.h>
 #include "util.h"
+#include "uart.h"
 
 #define SYS_write 64
 
@@ -153,6 +154,11 @@ void _init(int cid, int nc)
 
   char num[2]   = {cid, nc};
   char *argv[1] = {num};
+ 
+#ifdef FPGA 
+  init_uart();
+#endif  
+
   int ret = main(2, argv);
 
   ATOMIC_OP(finish_sync0, 1, add, w);
@@ -203,6 +209,9 @@ int putchar(int ch)
   static __thread char buf[64] __attribute__((aligned(64)));
   static __thread int buflen = 0;
 
+#ifdef FPGA 
+  write_serial(ch); 
+#else
   buf[buflen++] = ch;
 
   if (ch == '\n' || buflen == sizeof(buf))
@@ -211,7 +220,7 @@ int putchar(int ch)
     //syscall(SYS_write, 1, (uintptr_t)buf, buflen);
     buflen = 0;
   }
-
+#endif  
   return 0;
 }
 
