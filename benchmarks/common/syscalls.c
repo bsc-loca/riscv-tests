@@ -1,4 +1,29 @@
-// See LICENSE for license details.
+// Copyright (c) 2012-2015, The Regents of the University of California (Regents).
+// All Rights Reserved.
+
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the Regents nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
+
+// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING
+// OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF REGENTS HAS
+// BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
+// HEREUNDER IS PROVIDED "AS IS". REGENTS HAS NO OBLIGATION TO PROVIDE
+// MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+// this file has been copied and adapted for the OpenPiton testbench
 
 #include <stdint.h>
 #include <string.h>
@@ -15,27 +40,45 @@
 extern volatile uint64_t tohost;
 extern volatile uint64_t fromhost;
 
-static uintptr_t syscall(uintptr_t which, uint64_t arg0, uint64_t arg1, uint64_t arg2)
-{
-  volatile uint64_t magic_mem[8] __attribute__((aligned(64)));
-  magic_mem[0] = which;
-  magic_mem[1] = arg0;
-  magic_mem[2] = arg1;
-  magic_mem[3] = arg2;
-  __sync_synchronize();
-
-  tohost = (uintptr_t)magic_mem;
-  while (fromhost == 0)
-    ;
-  fromhost = 0;
-
-  __sync_synchronize();
-  return magic_mem[0];
-}
-
 #define NUM_COUNTERS 2
 static uintptr_t counters[NUM_COUNTERS];
 static char* counter_names[NUM_COUNTERS];
+
+
+
+// prints a cstring via the fake UART
+void printbuf(const char * buf, int buflen) {
+  volatile char * uartAddr = (char*)PITON_UART_ADDRESS;
+  for (int k=0; k < buflen; k++) {
+    // poll bit 5 of the LSR
+    while(!((*(uartAddr+5)) & 0x20));
+    (*uartAddr) = buf[k];
+    if(buf[k]=='\n') break;
+  }
+  return;
+}
+
+// GOOD pass trap for the OpenPiton TB and pitonstream, do not modify the function name
+void __attribute__((noreturn, noinline)) pass () {
+#ifdef PITONSTREAM  
+  // only do this with pitonstream - otherwise this might block the core since the load does not return in HW
+  // this can freeze GDB debug sessions via the DTM
+  volatile unsigned long long trap;
+  trap = *((unsigned long long *) PITON_TEST_GOOD_END);
+#endif  
+  while(1);
+}
+
+// BAD fail trap for the OpenPiton TB and pitonstream, do not modify the function name
+void __attribute__((noreturn, noinline)) fail () {
+#ifdef PITONSTREAM  
+  // only do this with pitonstream - otherwise this might block the core since the load does not return in HW
+  // this can freeze GDB debug sessions via the DTM
+  volatile unsigned long long trap;
+  trap = *((unsigned long long *) PITON_TEST_BAD_END);
+#endif    
+  while(1);
+}
 
 void setStats(int enable)
 {
@@ -53,10 +96,15 @@ void setStats(int enable)
 #undef READ_CTR
 }
 
-void __attribute__((noreturn)) tohost_exit(uintptr_t code)
+void __attribute__((noreturn, noinline)) tohost_exit(uintptr_t code)
 {
-  tohost = (code << 1) | 1;
-  while (1);
+  if (code) {
+    // printf("exit with code %lld\n", code);
+    fail();
+  } else {
+    // printf("exit with code %lld\n", code);
+    pass();
+  }
 }
 
 uintptr_t __attribute__((weak)) handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
@@ -64,26 +112,19 @@ uintptr_t __attribute__((weak)) handle_trap(uintptr_t cause, uintptr_t epc, uint
   tohost_exit(1337);
 }
 
-void exit(int code)
+void __attribute__((noreturn, noinline)) exit(int code)
 {
   tohost_exit(code);
 }
 
-void abort()
+void __attribute__((noreturn, noinline)) abort()
 {
   exit(128 + SIGABRT);
 }
 
 void printstr(const char* s)
 {
-  syscall(SYS_write, 1, (uintptr_t)s, strlen(s));
-}
-
-void __attribute__((weak)) thread_entry(int cid, int nc)
-{
-  // multi-threaded programs override this function.
-  // for the case of single-threaded programs, only let core 0 proceed.
-  while (cid != 0);
+  printbuf(s, strlen(s));
 }
 
 int __attribute__((weak)) main(int argc, char** argv)
@@ -104,23 +145,56 @@ static void init_tls()
   memset(thread_pointer + tdata_size, 0, tbss_size);
 }
 
+// always init all threads
 void _init(int cid, int nc)
 {
-  init_tls();
-  thread_entry(cid, nc);
+  volatile static uint32_t finish_sync0 = 0;
+  volatile static uint32_t finish_sync1 = 0;
 
-  // only single-threaded programs should ever get here.
-  int ret = main(0, 0);
+  char num[2]   = {cid, nc};
+  char *argv[1] = {num};
+  int ret = main(2, argv);
+
+  ATOMIC_OP(finish_sync0, 1, add, w);
+  //__asm__ __volatile__ (  " amoadd.w zero, %1, %0" : "+A" (finish_sync0) : "r" (1) : "memory");
+  while(finish_sync0 != nc);
+
+  // synchronize for debug output below
+  while(finish_sync1 != cid);
 
   char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
   char* pbuf = buf;
   for (int i = 0; i < NUM_COUNTERS; i++)
     if (counters[i])
-      pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
+      pbuf += sprintf(pbuf, "core %d: %s = %d\n", cid, counter_names[i], counters[i]);
   if (pbuf != buf)
     printstr(buf);
 
+  ATOMIC_OP(finish_sync1, 1, add, w);
+  //__asm__ __volatile__ (  " amoadd.w zero, %1, %0" : "+A" (finish_sync1) : "r" (1) : "memory");
+
   exit(ret);
+ 
+  // // only single-threaded programs should ever get here.
+  // if(nc!=1) {
+  //   return;
+  // }
+
+  // init_tls();
+
+  // char num[2]   = {cid, nc};
+  // char *argv[1] = {num};
+  // int ret = main(2, argv);
+
+  // char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
+  // char* pbuf = buf;
+  // for (int i = 0; i < NUM_COUNTERS; i++)
+  //   if (counters[i])
+  //     pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
+  // if (pbuf != buf)
+  //   printstr(buf);
+
+  // exit(ret);
 }
 
 #undef putchar
@@ -133,7 +207,8 @@ int putchar(int ch)
 
   if (ch == '\n' || buflen == sizeof(buf))
   {
-    syscall(SYS_write, 1, (uintptr_t)buf, buflen);
+    printbuf(buf, buflen);
+    //syscall(SYS_write, 1, (uintptr_t)buf, buflen);
     buflen = 0;
   }
 
@@ -227,7 +302,7 @@ static void vprintfmt(void (*putch)(int, void**), void **putdat, const char *fmt
     case '-':
       padc = '-';
       goto reswitch;
-      
+
     // flag to pad with 0's instead of spaces
     case '0':
       padc = '0';
@@ -336,7 +411,7 @@ static void vprintfmt(void (*putch)(int, void**), void **putdat, const char *fmt
     case '%':
       putch(ch, putdat);
       break;
-      
+
     // unrecognized escape sequence - just print it literally
     default:
       putch('%', putdat);
