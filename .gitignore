@@ -1,5 +1,6 @@
 *~
 *.riscv
+*.bin
 *.host
 *.o
 *.dump
