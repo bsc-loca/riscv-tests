@@ -453,6 +453,13 @@ int sprintf(char* str, const char* fmt, ...)
   return str - str0;
 }
 
+void print_float (double f){
+    int t =  f;
+    float t2 = (f*1000)-(t*1000);    
+    int t1 = t2;
+    printf("%u.%u",t,t1);    
+}
+
 void* memcpy(void* dest, const void* src, size_t len)
 {
   if ((((uintptr_t)dest | (uintptr_t)src | len) & (sizeof(uintptr_t)-1)) == 0) {

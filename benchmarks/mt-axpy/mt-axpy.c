@@ -40,7 +40,10 @@ int main(int argc, char** argv) {
    
     uint32_t cid = argv[0][0];
     uint32_t nc  = argv[0][1];
-    
+     
+    if(cid==0) printf("\nWe are %d cores.\n",nc);
+    barrier(nc);        
+   
     stats(axpy(cid,nc,ARRAY_SIZE,input1_data,input2_data,Alfa); barrier(nc), ARRAY_SIZE); // ROI
     barrier(nc); // barrier to ROI sync
   

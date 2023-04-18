@@ -43,6 +43,7 @@ bmarks = 			\
 	int-bubblesort  \
 	hello_world  	\
 	mt-axpy   		\
+	mt-somier   	\
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
