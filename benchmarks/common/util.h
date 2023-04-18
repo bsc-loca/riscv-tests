@@ -163,8 +163,8 @@ static uintptr_t insn_len(uintptr_t pc)
     code; \
     _c += read_csr(mcycle), _i += read_csr(minstret); \
     if (cid == 0) \
-      printf("\n%s: %ld cycles, %ld.%ld cycles/iter, %ld.%ld CPI\n", \
-             stringify(code), _c, _c/iter, 10*_c/iter%10, _c/_i, 10*_c/_i%10); \
+      printf("\n%s: %ld cycles, %ld instructions, %ld.%ld cycles/iter, %ld.%ld CPI\n\n", \
+             stringify(code), _c, _i, _c/iter, 10*_c/iter%10, _c/_i, 10*_c/_i%10); \
   } while(0)
 
 #endif //__UTIL_H

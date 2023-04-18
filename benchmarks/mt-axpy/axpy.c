@@ -1,0 +1,26 @@
+#include "dataset.h"
+#include "util.h"
+#include <stddef.h>
+
+void axpy(const size_t coreid, const size_t ncores, const size_t lda , data_t A[], data_t B[], data_t alpha)
+{
+    size_t i, k, block, start, end;
+    
+    block = lda / ncores; 
+    
+    if ((block*ncores) != lda) block++;
+    
+    start = block * coreid;
+    end   = start + block;
+    
+    if (end > lda) end = lda;
+    
+    for (i = start; i < end; i++) {
+        A[i] += alpha * B[i];
+    }
+}
+
+
+
+
+

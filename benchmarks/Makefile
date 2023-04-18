@@ -18,30 +18,31 @@ instbasedir = $(UCB_VLSI_HOME)/install
 #--------------------------------------------------------------------
 
 # Original lista for references	
-bmarks = \
-	histogram   \
-	mt-histogram   \
-	int-median \
-	fd-median \
-	qsort \
-	rsort \
-	towers \
-	int-vvadd \
-	fd-vvadd \
-	int-multiply \
-	fd-multiply \
-	mm \
-	dhrystone \
-	fd-spmv \
-	int-spmv \
-	mt-vvadd \
-	mt-matmul \
-	fd-matrix_mult \
+bmarks = 			\
+	histogram   	\
+	mt-histogram   	\
+	int-median 		\
+	fd-median 		\
+	qsort 			\
+	rsort 			\
+	towers 			\
+	int-vvadd 		\
+	fd-vvadd 		\
+	int-multiply 	\
+	fd-multiply 	\
+	mm 				\
+	dhrystone 		\
+	fd-spmv 		\
+	int-spmv 		\
+	mt-vvadd 		\
+	mt-matmul 		\
+	fd-matrix_mult 	\
 	int-matrix_mult \
-	fibonacci   \
-	fd-bubblesort  \
+	fibonacci  		\
+	fd-bubblesort  	\
 	int-bubblesort  \
-	hello_world  \
+	hello_world  	\
+	mt-axpy   		\
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
