@@ -45,6 +45,7 @@ bmarks = 			\
 	mt-axpy   		\
 	mt-somier   	\
 	mt-stream-copy  \
+	mt-stream-triad \
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
