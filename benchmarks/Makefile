@@ -44,6 +44,7 @@ bmarks = 			\
 	hello_world  	\
 	mt-axpy   		\
 	mt-somier   	\
+	mt-stream-copy  \
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
