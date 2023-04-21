@@ -46,6 +46,7 @@ bmarks = 			\
 	mt-somier   	\
 	mt-stream-copy  \
 	mt-stream-triad \
+	mt-int-sort   	\
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
