@@ -48,6 +48,7 @@ bmarks = 			\
 	mt-stream-triad \
 	mt-int-sort   	\
 	mt-blackscholes \
+	mt-jacobi_2d   	\
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
