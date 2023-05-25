@@ -33,22 +33,50 @@ static uintptr_t syscall(uintptr_t which, uint64_t arg0, uint64_t arg1, uint64_t
   return magic_mem[0];
 }
 
-#define NUM_COUNTERS 2
+#define NUM_COUNTERS 30
 static uintptr_t counters[NUM_COUNTERS];
 static char* counter_names[NUM_COUNTERS];
 
 void setStats(int enable)
 {
   int i = 0;
-#define READ_CTR(name) do { \
+#define READ_CTR(name, label) do { \
     while (i >= NUM_COUNTERS) ; \
     uintptr_t csr = read_csr(name); \
-    if (!enable) { csr -= counters[i]; counter_names[i] = #name; } \
+    if (!enable) { csr -= counters[i]; counter_names[i] = label; } \
     counters[i++] = csr; \
   } while (0)
 
-  READ_CTR(mcycle);
-  READ_CTR(minstret);
+  READ_CTR(mcycle,        "Cycles");
+  READ_CTR(minstret,      "Retired instructions");
+  READ_CTR(mhpmcounter3,  "Missed Branches");
+  READ_CTR(mhpmcounter4,  "Executed Branches");
+  READ_CTR(mhpmcounter5,  "Taken Branches");
+  READ_CTR(mhpmcounter6,  "Executed Stores");
+  READ_CTR(mhpmcounter7,  "Executed Loads");
+  READ_CTR(mhpmcounter8,  "iCache Requests");
+  READ_CTR(mhpmcounter9,  "iCache Kills");
+  READ_CTR(mhpmcounter10, "Stalls of Fetch");
+  READ_CTR(mhpmcounter11, "Stalls of Decode");
+  READ_CTR(mhpmcounter12, "Stalls of Read Register");
+  READ_CTR(mhpmcounter13, "Stalls of Execute");
+  READ_CTR(mhpmcounter14, "Stalls of Writeback");
+  READ_CTR(mhpmcounter15, "buffer_miss");
+  READ_CTR(mhpmcounter16, "imiss_kill");
+  READ_CTR(mhpmcounter17, "icache_bussy");
+  READ_CTR(mhpmcounter18, "imiss_time");
+  READ_CTR(mhpmcounter19, "Cycles of Load blocked by Store");
+  READ_CTR(mhpmcounter20, "Stalls by Data Dependencies");
+  READ_CTR(mhpmcounter21, "Stalls by Structural Risks");
+  READ_CTR(mhpmcounter22, "Stalls by Graduation List Full");
+  READ_CTR(mhpmcounter23, "Stalls by Free List Empty");
+  READ_CTR(mhpmcounter24, "iTLB access");
+  READ_CTR(mhpmcounter25, "iTLB miss");
+  READ_CTR(mhpmcounter26, "dTLB access");
+  READ_CTR(mhpmcounter27, "dTLB miss");
+  READ_CTR(mhpmcounter28, "PTW cache hit");
+  READ_CTR(mhpmcounter29, "PTW cache miss");
+  READ_CTR(mhpmcounter30, "Stalls by iTLB miss");
 
 #undef READ_CTR
 }
@@ -103,19 +131,51 @@ static void init_tls()
   memset(thread_pointer + tdata_size, 0, tbss_size);
 }
 
+static void init_hpm() {
+    write_csr(mhpmevent3,   1);
+    write_csr(mhpmevent4,   2);
+    write_csr(mhpmevent5,   3);
+    write_csr(mhpmevent6,   4);
+    write_csr(mhpmevent7,   5);
+    write_csr(mhpmevent8,   6);
+    write_csr(mhpmevent9,   7);
+    write_csr(mhpmevent10,  8);
+    write_csr(mhpmevent11,  9);
+    write_csr(mhpmevent12, 10);
+    write_csr(mhpmevent13, 11);
+    write_csr(mhpmevent14, 12);
+    write_csr(mhpmevent15, 13);
+    write_csr(mhpmevent16, 14);
+    write_csr(mhpmevent17, 15);
+    write_csr(mhpmevent18, 16);
+    write_csr(mhpmevent19, 17);
+    write_csr(mhpmevent20, 18);
+    write_csr(mhpmevent21, 19);
+    write_csr(mhpmevent22, 20);
+    write_csr(mhpmevent23, 21);
+    write_csr(mhpmevent24, 22);
+    write_csr(mhpmevent25, 23);
+    write_csr(mhpmevent26, 24);
+    write_csr(mhpmevent27, 25);
+    write_csr(mhpmevent28, 26);
+    write_csr(mhpmevent29, 27);
+    write_csr(mhpmevent30, 28);
+}
+
 void _init(int cid, int nc)
 {
   init_tls();
   thread_entry(cid, nc);
 
   // only single-threaded programs should ever get here.
+  init_hpm();
+
   int ret = main(0, 0);
 
   char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
   char* pbuf = buf;
   for (int i = 0; i < NUM_COUNTERS; i++)
-    if (counters[i])
-      pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
+    pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
   if (pbuf != buf)
     printstr(buf);
 
