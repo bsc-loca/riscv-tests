@@ -36,6 +36,20 @@ bmarks = \
 	vec-daxpy \
 	vec-sgemm \
 	vec-strcmp \
+	axpy \
+	bubblesort \
+	fibonacci \
+	histogram \
+	matmul_fp \
+	matrix_mult \
+	mem_copy \
+	mem_flush \
+	peak_flops \
+	peak_flops_div \
+	peak_flops_mix \
+	peak_mips \
+	spmv_fp \
+	coremark
 
 #--------------------------------------------------------------------
 # Build rules
