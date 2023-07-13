@@ -13,6 +13,8 @@
 
 #include "median.h"
 
+#define NUMBER_OF_RUNS		10 /* Default number of runs */
+
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
@@ -32,7 +34,9 @@ int main( int argc, char* argv[] )
 
   // Do the filter
   setStats(1);
-  median( DATA_SIZE, input_data, results_data );
+  for(unsigned int i = 0; i < NUMBER_OF_RUNS; i++) {
+    median( DATA_SIZE, input_data, results_data );
+  }
   setStats(0);
 
   // Check the results

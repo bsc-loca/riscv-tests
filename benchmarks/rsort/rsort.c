@@ -14,6 +14,8 @@
 #include <string.h>
 #include <limits.h>
 
+#define NUMBER_OF_RUNS		10 /* Default number of runs */
+
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
@@ -114,7 +116,9 @@ int main( int argc, char* argv[] )
 
   // Do the sort
   setStats(1);
-  sort(DATA_SIZE, input_data, scratch);
+  for (unsigned int i = 0; i < NUMBER_OF_RUNS; i++) {
+    sort(DATA_SIZE, input_data, scratch);
+  }
   setStats(0);
 
   // Check the results

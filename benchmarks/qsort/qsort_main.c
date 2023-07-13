@@ -14,6 +14,8 @@
 #include <string.h>
 #include <assert.h>
 
+#define NUMBER_OF_RUNS 10
+
 // The INSERTION_THRESHOLD is the size of the subarray when the
 // algorithm switches to using an insertion sort instead of
 // quick sort.
@@ -145,7 +147,9 @@ int main( int argc, char* argv[] )
 
   // Do the sort
   setStats(1);
-  sort( DATA_SIZE, input_data );
+  for (unsigned int i = 0; i < NUMBER_OF_RUNS; i++) {
+    sort( DATA_SIZE, input_data );
+  }
   setStats(0);
 
   // Check the results

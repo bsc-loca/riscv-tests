@@ -14,7 +14,7 @@
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
-#include "dataset1.h"
+#include "dataset1-large.h"
 
 //--------------------------------------------------------------------------
 // vvadd function
@@ -40,7 +40,9 @@ int main( int argc, char* argv[] )
 
   // Do the vvadd
   setStats(1);
-  vvadd( DATA_SIZE, input1_data, input2_data, results_data );
+  for (unsigned int i = 0; i < 10; i++) {
+    vvadd( DATA_SIZE, input1_data, input2_data, results_data );
+  }
   setStats(0);
 
   // Check the results

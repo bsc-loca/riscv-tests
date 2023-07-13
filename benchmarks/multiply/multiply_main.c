@@ -18,6 +18,8 @@
 
 #include "dataset1.h"
 
+#define NUMBER_OF_RUNS		10 /* Default number of runs */
+
 //--------------------------------------------------------------------------
 // Main
 
@@ -34,9 +36,11 @@ int main( int argc, char* argv[] )
 #endif
 
   setStats(1);
-  for (i = 0; i < DATA_SIZE; i++)
-  {
-    results_data[i] = multiply( input_data1[i], input_data2[i] );
+  for (unsigned int i = 0; i < NUMBER_OF_RUNS; i++) {
+    for (i = 0; i < DATA_SIZE; i++)
+    {
+      results_data[i] = multiply( input_data1[i], input_data2[i] );
+    }
   }
   setStats(0);
 
