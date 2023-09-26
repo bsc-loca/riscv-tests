@@ -1,3 +1,90 @@
+RISC-V ISA tests and Benchmarks
+================
+
+Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton framework.
+
+### Build ISA tests
+
+    cd isa
+    make -j$(nproc)
+
+### Build Benchmarks (single-core)
+
+    cd benchmarks
+    make -j$(nproc)
+
+### Build Benchmarks (multi-core)
+
+    make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4
+
+### Build Benchmarks to use in FPGA (single-core)
+
+    make -j$(nproc) fpga
+
+### Build Benchmarks to use in FPGA (multi-core)
+
+    make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4 fpga
+
+### Available Benchmarks
+
+| No  | Benchmark      |Data Type | 
+|-----|----------------|----------| 
+| 1   |dhrystone       |   int    |    
+| 2   |fibonacci       |   int    |   
+| 3   |histogram       | uint8\_t |   
+| 4   |qsort           |   int    |   
+| 5   |rsort           |   int    |   
+| 6   |towers          |   int    |   
+| 7   |int-bubblesort  |   int    |   
+| 8   |int-matrix\_mult|   int    |   
+| 9   |int-median      |   int    |   
+| 10  |int-multiply    |   int    |   
+| 11  |int-spmv        |   int    |   
+| 12  |int-vvadd       |   int    |   
+| 13  |fd-bubblesort   |  double  |   
+| 14  |fd-matrix\_mult |  double  |   
+| 15  |fd-median       |  double  |   
+| 16  |fd-multiply     |  double  |   
+| 17  |fd-spmv         |  double  |   
+| 18  |fd-vvadd        |  double  |   
+| 19  |mt-axpy         |  double  |   
+| 20  |mt-blackscholes |  double  |   
+| 21  |mt-histogram    |  double  |   
+| 22  |mt-int-sort     |  double  |   
+| 23  |mt-jacobi\_2d   |  double  |   
+| 24  |mt-matmul       |  double  |   
+| 25  |mt-somier       |  double  |   
+| 26  |mt-stream-copy  |  double  |   
+| 27  |mt-stream-triad |  double  |   
+| 28  |mt-vvadd        |  double  |   
+| 29  |mm              |  double  |   
+
+
+
+
+
+
+
+
+
+
+=========================       ========================= 
+
+*
+
+*
+
+*
+
+*
+
+
+
+
+
+
+
+
 riscv-tests
 ================
 
