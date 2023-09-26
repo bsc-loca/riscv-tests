@@ -9,6 +9,7 @@
 // generated using the vvadd_gendata.pl perl script and dumped
 // to a file named dataset1.h.
  
+#include <stdlib.h>
 #include "util.h"
 #include "metrics.h"
 
@@ -45,5 +46,5 @@ int main( int argc, char* argv[] )
   print_metrics("fd-vvadd");
 
   // Check the results
-  return verifyDouble( DATA_SIZE, results_data, verify_data );
+  exit (verifyDouble( DATA_SIZE, results_data, verify_data ));
 }

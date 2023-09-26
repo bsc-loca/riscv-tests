@@ -10,6 +10,7 @@
 // qsort_gendata.pl perl script and dumped to a file named
 // dataset1.h.
 
+#include <stdlib.h>
 #include "util.h"
 #include <string.h>
 #include <assert.h>
@@ -148,8 +149,8 @@ int main( int argc, char* argv[] )
   sort( DATA_SIZE, input_data );
   roi_end(); 
   print_metrics("qsort");
- 
   
   // Check the results
-  return verify_int( DATA_SIZE, input_data, verify_data );
+  exit (verify_int( DATA_SIZE, input_data, verify_data ));
+
 }

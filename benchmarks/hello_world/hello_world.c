@@ -11,7 +11,7 @@
 
 int main(int argc, char ** argv) {
 
-    printf("\n hello world, I am the Lagarto Tile. \n\n");
+    printf("\n hello world!. \n\n");
 
     printf("+----------------------------------------------------+  \n");
     printf("     .-.--_                                             \n");    

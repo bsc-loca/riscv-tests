@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/times.h>
+#include <stdlib.h>
 #include "util.h"
 #include "metrics.h"
 
@@ -28,5 +29,5 @@ int main() {
       if (A[i] != fib_check[i]) ++errors;
   }
 
-  return errors;
+  exit (errors);
 } 

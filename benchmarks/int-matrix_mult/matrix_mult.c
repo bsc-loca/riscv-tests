@@ -12,6 +12,7 @@
  *----------------------------------------------------------------------*/
 
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/times.h>
 #include "util.h"
@@ -53,7 +54,7 @@ int main() {
     print_metrics("fd-matrix_mult");
 
 
-    return 0; 
+    exit(0); 
 }
 
 

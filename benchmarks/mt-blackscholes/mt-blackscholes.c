@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
 //--------------------------------------------------------
 //ROI
-    _blackscholes_(nc,cid,priceDelta);
+    stats(_blackscholes_(nc,cid,priceDelta);barrier(nc), ARRAY_SIZE);
     barrier(nc);
 //--------------------------------------------------------
     int res = verify_blackscholes(nc,cid,priceDelta);

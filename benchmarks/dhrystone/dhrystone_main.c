@@ -7,6 +7,7 @@
 // This is the classic Dhrystone synthetic integer benchmark.
 //
 
+#include <stdlib.h>
 #pragma GCC optimize ("no-inline")
 
 #include "dhrystone.h"
@@ -14,6 +15,7 @@
 void debug_printf(const char* str, ...);
 
 #include "util.h"
+#include "metrics.h"
 
 #include <alloca.h>
 
@@ -111,8 +113,8 @@ int main (int argc, char** argv)
     /* Start timer */
     /***************/
 
-    setStats(1);
     Start_Timer();
+    roi_start(); 
 
     for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index)
     {
@@ -163,9 +165,8 @@ int main (int argc, char** argv)
     /**************/
     /* Stop timer */
     /**************/
-
+    roi_end(); 
     Stop_Timer();
-    setStats(0);
 
     User_Time = End_Time - Begin_Time;
 
@@ -234,8 +235,9 @@ int main (int argc, char** argv)
 
   printf("Microseconds for one run through Dhrystone: %ld\n", Microseconds);
   printf("Dhrystones per Second:                      %ld\n", Dhrystones_Per_Second);
-
-  return 0;
+  print_metrics("Dhrystone");
+  
+  exit(0);
 }
 
 

@@ -4,6 +4,7 @@
 // Double-precision sparse matrix-vector multiplication benchmark
 //--------------------------------------------------------------------------
 
+#include <stdlib.h>
 #include "util.h"
 #include "metrics.h"
 
@@ -50,5 +51,5 @@ int main( int argc, char* argv[] )
   roi_end(); 
   print_metrics("fd-spmv");
 
-  return verifyDouble(R, y, verify_data);
+  exit (verifyDouble(R, y, verify_data));
 }

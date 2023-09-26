@@ -4,6 +4,7 @@
 // Double-precision general matrix multiplication benchmark
 //--------------------------------------------------------------------------
 
+#include <stdlib.h>
 #include "util.h"
 #include "metrics.h"
 
@@ -52,6 +53,6 @@ int main( int argc, char* argv[] ) {
   print_metrics("int-spmv");
 
   // Check the results
-  return verify(R, y, verify_data);
+  exit (verify(R, y, verify_data));
 
 }

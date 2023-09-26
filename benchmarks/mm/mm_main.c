@@ -8,8 +8,11 @@
 
 #pragma GCC optimize ("unroll-loops")
 
-void main(int cid, int nc)
-{
+int main(int argc, char** argv) {
+   
+  uint32_t cid = argv[0][0];
+  uint32_t nc  = argv[0][1];
+
   const int R = 8;
   int m, n, p;
   uint64_t s = 0xdeadbeefU;
@@ -44,12 +47,13 @@ void main(int cid, int nc)
 
   printf("C%d: reg block %dx%dx%d, cache block %dx%dx%d\n",
          cid, RBM, RBN, RBK, CBM, CBN, CBK);
-  printf("C%d: %d instructions\n", cid, (int)(instret));
-  printf("C%d: %d cycles\n", cid, (int)(cycles));
-  printf("C%d: %d flops\n", cid, 2*m*n*p);
-  printf("C%d: %d Mflops @ 1 GHz\n", cid, 2000*m*n*p/(cycles));
+  printf("Instructions: %d \n", (int)(instret));
+  printf("Cycles: %d \n", (int)(cycles));
+  printf(" %d flops\n", 2*m*n*p);
+  printf(" %d Mflops @ 1 GHz\n", 2000*m*n*p/(cycles));
 
 #if 1
+  printf("x1");
   for (size_t i = 0; i < m; i++)
   {
     for (size_t j = 0; j < n; j++)
@@ -60,13 +64,15 @@ void main(int cid, int nc)
       s *= R;
       if (fabs(c[i*n+j]-s) > fabs(1e-6*s))
       {
+        printf("x2");
         printf("C%d: c[%lu][%lu] %f != %f\n", cid, i, j, c[i*n+j], s);
         exit(1);
       }
     }
   }
 #endif
-
+  printf("x3");
   barrier(nc);
+  printf("x4");
   exit(0);
 }

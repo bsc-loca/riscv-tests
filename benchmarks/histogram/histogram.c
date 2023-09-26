@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/times.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "util.h"
 #include "metrics.h"
@@ -56,6 +57,7 @@ int main(int argc, char** argv) {
     
     if(cnt != DATA_SIZE) {
         printf("Error: Only %d were counted. \n", cnt);
-        return 1;
-    } else return 0;
+        exit(1);
+    } else exit(0);
+
 }

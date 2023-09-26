@@ -2,6 +2,8 @@
 #include <sys/times.h>
 #include <stdio.h>
 
+#include <stdlib.h>
+
 #include "metrics.h"
 #include "util.h"
 #include "dataset.h"
@@ -25,7 +27,6 @@ int main (void)  {
     //----------------------------------------------------------
     roi_end(); 
     print_metrics("fd-bubblesort");
-
                     
 	int error=0;                
 	for (i=0;i<DATA_SIZE;i++) { 
@@ -33,9 +34,8 @@ int main (void)  {
             error = 1;
             printf("The program failed in element %d ,input_data %d , verify_data %d \n", 
                     i,input_data[i] ,verify_data[i]);
-			return error;
+			exit(error);
 		}
 	}
-    
-    return error; 
+    exit(error);
 } 

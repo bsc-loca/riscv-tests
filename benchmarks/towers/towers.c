@@ -18,6 +18,7 @@
 // smips processor simulator itself. You should not change anything except
 // the HOST_DEBUG and PREALLOCATE macros for your timing run.
 
+#include <stdlib.h>
 #include "util.h"
 #include "metrics.h"
 
@@ -292,7 +293,7 @@ int main( int argc, char* argv[] ) {
 #endif
 
     // Check the results
-    return towers_verify( &towers );
+    exit (towers_verify( &towers ));
 
 }
 

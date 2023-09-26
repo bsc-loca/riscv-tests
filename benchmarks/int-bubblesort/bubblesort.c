@@ -2,6 +2,8 @@
 #include <sys/times.h>
 #include <stdio.h>
 
+#include <stdlib.h>
+
 #include "metrics.h"
 #include "util.h"
 #include "dataset.h"
@@ -37,9 +39,8 @@ int main (void)  {
             error = 1;
             printf("The program failed in element %d ,input_data %d , verify_data %d \n", 
                     i,input_data[i] ,verify_data[i]);
-			return error;
+			exit(error);
 		}
 	}
-    
-    return error; 
+    exit(error);
 } 
