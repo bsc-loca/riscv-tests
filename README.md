@@ -27,37 +27,37 @@ Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton 
 
 ### Available Benchmarks
 
-| No  | Benchmark      |Data Type | 
-|-----|----------------|----------| 
-| 1   |dhrystone       |   int    |    
-| 2   |fibonacci       |   int    |   
-| 3   |histogram       | uint8\_t |   
-| 4   |qsort           |   int    |   
-| 5   |rsort           |   int    |   
-| 6   |towers          |   int    |   
-| 7   |int-bubblesort  |   int    |   
-| 8   |int-matrix\_mult|   int    |   
-| 9   |int-median      |   int    |   
-| 10  |int-multiply    |   int    |   
-| 11  |int-spmv        |   int    |   
-| 12  |int-vvadd       |   int    |   
-| 13  |fd-bubblesort   |  double  |   
-| 14  |fd-matrix\_mult |  double  |   
-| 15  |fd-median       |  double  |   
-| 16  |fd-multiply     |  double  |   
-| 17  |fd-spmv         |  double  |   
-| 18  |fd-vvadd        |  double  |   
-| 19  |mt-axpy         |  double  |   
-| 20  |mt-blackscholes |  double  |   
-| 21  |mt-histogram    |  double  |   
-| 22  |mt-int-sort     |  double  |   
-| 23  |mt-jacobi\_2d   |  double  |   
-| 24  |mt-matmul       |  double  |   
-| 25  |mt-somier       |  double  |   
-| 26  |mt-stream-copy  |  double  |   
-| 27  |mt-stream-triad |  double  |   
-| 28  |mt-vvadd        |  double  |   
-| 29  |mm              |  double  |   
+| No  | Benchmark      |Data Type | Problem Size | 
+|-----|----------------|----------|--------------|
+| 1   |dhrystone       | int      | 1k runs      | 
+| 2   |fibonacci       | int      | 25 numbers   |
+| 3   |histogram       | uint8\_t | 16 KB        |
+| 4   |qsort           | int      | 32 KB        |
+| 5   |rsort           | int      | 32 KB        |
+| 6   |towers          | int      | 7 Discs, 40 runs  |
+| 7   |int-bubblesort  | long     | 8 KB         |
+| 8   |int-matrix\_mult| int      | 48 KB        |
+| 9   |int-median      | int      | 32 KB        |
+| 10  |int-multiply    | int      | 24 KB        |
+| 11  |int-spmv        | long     | 135 KB       |
+| 12  |int-vvadd       | int      | 24 KB        |
+| 13  |fd-bubblesort   | double   | 8 KB         |
+| 14  |fd-matrix\_mult | float    | 48 KB        |
+| 15  |fd-median       | float    | 32 KB        |
+| 16  |fd-multiply     | double   | 24 KB        |
+| 17  |fd-spmv         | double   | 135 KB       |
+| 18  |fd-vvadd        | float    | 24 KB        |
+| 19  |mt-axpy         | double   | 256 KB       |
+| 20  |mt-blackscholes | float    |              |
+| 21  |mt-histogram    | int      | 64 KB        |
+| 22  |mt-int-sort     | int      | 64 KB        |
+| 23  |mt-jacobi\_2d   | double   | 64 KB        |
+| 24  |mt-matmul       | double   | 96 KB        |
+| 25  |mt-somier       | double   | 93 KB        |
+| 26  |mt-stream-copy  | double   | 256 KB       |
+| 27  |mt-stream-triad | double   | 192 KB       |
+| 28  |mt-vvadd        | double   | 96 KB        |
+| 29  |mm              | double   | 13 KB        |
 
 
 
