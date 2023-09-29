@@ -68,6 +68,7 @@ int main(int argc, char** argv)
 
    // Second do in-place vvadd
    // Copying input
+   /*
    size_t i;
    if(cid == 0) {
      for (i = 0; i < DATA_SIZE; i++)
@@ -82,13 +83,7 @@ int main(int argc, char** argv)
    }
    
    barrier(nc);
-   
-  //while(argv[0][0] != amo_cnt);
-  // assemble number and print
-  //printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
-  // increment atomic counter
-  //ATOMIC_OP(amo_cnt, 1, add, w);
-
+   */
 
    return 0;
 }
