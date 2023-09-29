@@ -16,12 +16,12 @@
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
-#include "dataset1.h"
+#include "dataset.h"
 
 //--------------------------------------------------------------------------
 // vvadd function
 
-void vvadd( int n, double a[], double b[], double c[] )
+void vvadd( int n, float a[], float b[], float c[] )
 {
   int i;
   for ( i = 0; i < n; i++ )
@@ -33,7 +33,7 @@ void vvadd( int n, double a[], double b[], double c[] )
 
 int main( int argc, char* argv[] )
 {
-  double results_data[DATA_SIZE];
+  float results_data[DATA_SIZE];
 
 #if PREALLOCATE
   // If needed we preallocate everything in the caches
@@ -46,5 +46,5 @@ int main( int argc, char* argv[] )
   print_metrics("fd-vvadd");
 
   // Check the results
-  exit (verifyDouble( DATA_SIZE, results_data, verify_data ));
+  exit (verifyFloat( DATA_SIZE, results_data, verify_data ));
 }

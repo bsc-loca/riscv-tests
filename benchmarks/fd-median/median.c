@@ -4,9 +4,9 @@
 // Median filter (c version)
 //--------------------------------------------------------------------------
 
-void median( int n, double input[], double results[] )
+void median( int n, float input[], float results[] )
 {
-  double A, B, C;
+  float A, B, C;
   int i;
 
   // Zero the ends

@@ -31,7 +31,7 @@
 // Input/Reference Data
 
 #define type int
-#include "dataset1.h"
+#include "dataset.h"
 
 // Swap macro for swapping two values.
 

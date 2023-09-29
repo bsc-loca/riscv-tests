@@ -6,9 +6,9 @@
 #include "util.h"
 #include "metrics.h"
 
-#include "dataset1.h"
+#include "dataset.h"
 
-int histogram[16] = {};
+uint32_t histogram[HISTOGRAM_SIZE] = {};
 
 int cores_count;
 int core_data_lenght;
@@ -16,18 +16,9 @@ int core_data_lenght;
 int main(int argc, char** argv) {
 
     // get the number of hardware cores we have available in the system
-    //cores_count = get_core_count();
     cores_count = 1;
     core_data_lenght = DATA_SIZE/cores_count;
 
-    // Printing some info
-    //printf("   Executing with : %u Cores\n", cores_count);
-
-    // wakeup all the cores
-    //_cores_fork_(cores_count);
-
-    // get the local core hardware id
-    //int coreID = get_core_id();
     int coreID = 0;
 
     // Calculate the cores begin and end of the data chunks
@@ -44,20 +35,9 @@ int main(int argc, char** argv) {
     roi_end();    
     print_metrics("histogram");
 
-
-    
-    // synchronize the cores execution
-    //barrier(cores_count);
-
-    // put the core except the 0 to idle mode
-    //_core_idle_(coreID);
-
-    int cnt = 0;
-    for (int x=0; x<16; x++) cnt=cnt+histogram[x];
-    
-    if(cnt != DATA_SIZE) {
-        printf("Error: Only %d were counted. \n", cnt);
-        exit(1);
-    } else exit(0);
+    for (int k=0; k<HISTOGRAM_SIZE; k++){
+        if(verify_data[k] != histogram[k]) exit(1); 
+    }  
+    exit(0) ;
 
 }

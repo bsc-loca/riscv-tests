@@ -20,7 +20,7 @@
 // Input/Reference Data
 
 #define type unsigned int
-#include "dataset1.h"
+#include "dataset.h"
 
 #define LOG_BASE 8
 #define BASE (1 << LOG_BASE)

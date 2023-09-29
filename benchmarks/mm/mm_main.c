@@ -53,7 +53,6 @@ int main(int argc, char** argv) {
   printf(" %d Mflops @ 1 GHz\n", 2000*m*n*p/(cycles));
 
 #if 1
-  printf("x1");
   for (size_t i = 0; i < m; i++)
   {
     for (size_t j = 0; j < n; j++)
@@ -64,15 +63,12 @@ int main(int argc, char** argv) {
       s *= R;
       if (fabs(c[i*n+j]-s) > fabs(1e-6*s))
       {
-        printf("x2");
         printf("C%d: c[%lu][%lu] %f != %f\n", cid, i, j, c[i*n+j], s);
         exit(1);
       }
     }
   }
 #endif
-  printf("x3");
   barrier(nc);
-  printf("x4");
   exit(0);
 }

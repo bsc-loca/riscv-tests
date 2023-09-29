@@ -30,7 +30,7 @@
 
 #define UPPERLIMIT 64
 
-typedef double matrix [UPPERLIMIT][UPPERLIMIT];
+typedef float matrix [UPPERLIMIT][UPPERLIMIT];
 
 int Seed;
 matrix ArrayA, ArrayB, ResultArray;

@@ -17,14 +17,14 @@
 //--------------------------------------------------------------------------
 // Input/Reference Data
 
-#include "dataset1.h"
+#include "dataset.h"
 
 //--------------------------------------------------------------------------
 // Main
 
 int main( int argc, char* argv[] )
 {
-  double results_data[DATA_SIZE];
+  float results_data[DATA_SIZE];
 
 #if PREALLOCATE
   // If needed we preallocate everything in the caches
@@ -40,5 +40,5 @@ int main( int argc, char* argv[] )
    
   
   // Check the results
-  exit(verifyDouble( DATA_SIZE, results_data, verify_data ));
+  exit(verifyFloat( DATA_SIZE, results_data, verify_data ));
 }

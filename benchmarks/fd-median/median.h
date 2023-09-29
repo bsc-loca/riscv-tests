@@ -5,7 +5,7 @@
 //--------------------------------------------------------------------------
 
 // Simple C version
-void median( int n, double input[], double results[] );
+void median( int n, float input[], float results[] );
 
 // Simple assembly version
 void median_asm( int n, int input[], int results[] );
