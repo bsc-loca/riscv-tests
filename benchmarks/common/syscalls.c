@@ -175,7 +175,7 @@ void _init(int cid, int nc)
   char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
   char* pbuf = buf;
   for (int i = 0; i < NUM_COUNTERS; i++)
-    pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
+    pbuf += sprintf(pbuf, "%s = %u\n", counter_names[i], counters[i]);
   if (pbuf != buf)
     printstr(buf);
 
