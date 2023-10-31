@@ -59,7 +59,7 @@ RISCV_GCC ?= $(RISCV_PREFIX)gcc
 
 RISCV_GCC_OPTS ?= -DPREALLOCATE=1 -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -march=rv64imafd -mabi=lp64d $(NUMTILES) $(TARGET)
 RISCV_LINK ?= $(RISCV_GCC) -T $(src_dir)/common/test.ld $(incs)
-RISCV_LINK_OPTS ?= -static -nostdlib -nostartfiles -lm -lc -lgcc -T $(src_dir)/common/test.ld
+RISCV_LINK_OPTS ?= -static -nostdlib -nostartfiles -lm -lc -lgcc -specs=nano.specs -specs=nosys.specs -T $(src_dir)/common/test.ld
 RISCV_OBJDUMP ?= $(RISCV_PREFIX)objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
 RISCV_OBJCOPY ?= $(RISCV_PREFIX)objcopy -O binary
 RISCV_SIM ?= spike --isa=rv$(XLEN)gc
