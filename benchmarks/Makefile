@@ -32,10 +32,6 @@ bmarks = \
 	mt-matmul \
 	mt-memcpy \
 	pmp \
-	vec-memcpy \
-	vec-daxpy \
-	vec-sgemm \
-	vec-strcmp \
 	axpy \
 	bubblesort \
 	fibonacci \
