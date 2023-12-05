@@ -183,6 +183,7 @@ void _init(int cid, int nc)
 }
 
 #undef putchar
+#ifndef FPGA
 int putchar(int ch)
 {
   static __thread char buf[64] __attribute__((aligned(64)));
@@ -198,6 +199,15 @@ int putchar(int ch)
 
   return 0;
 }
+#else
+volatile uint32_t *uart_base = 0x40001000;
+int putchar(int ch)
+{
+  *uart_base = ch;
+
+  return 0;
+}
+#endif
 
 void printhex(uint64_t x)
 {
