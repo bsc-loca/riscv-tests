@@ -1,0 +1,61 @@
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
+#include "dataset.h"
+
+#include "util.h"
+#include "double_cmp.h"
+
+void __attribute__((noinline)) spmv(const size_t coreid, const size_t ncores, const size_t lda, int ptr[], int col[], data_t val[], data_t x[], data_t y[]);
+extern int mt_verify(const size_t coreid, const size_t ncores, const size_t lda, data_t* test, data_t* verify);
+
+/* 
+ * 
+ */
+
+int main(int argc, char** argv) 
+{
+    uint32_t cid = argv[0][0];
+    uint32_t nc  = argv[0][1];
+
+    if(cid==0) printf("\nWe are %d cores.\n",nc);
+    barrier(nc);        
+
+    stats(spmv(cid,nc,NROW,ptr,col,val,x,y);barrier(nc),NNZ); // ROI
+    barrier(nc); // barrier to ROI sync
+  
+    int res = mt_verify(cid,nc,NROW,y,ref);
+    barrier(nc);        
+    
+    if(res){
+        printf("Core %d: Verification failed!\n",cid);
+        exit(res);  
+    }
+       
+    exit(0);
+}
+/*   
+ *
+ */
+void spmv(const size_t coreid, const size_t ncores, const size_t lda, int ptr[], int col[], data_t val[], data_t x[], data_t y[]){
+    
+    size_t i, k, block, start, end;
+    
+    block = lda / ncores; 
+    
+    if ((block*ncores) != lda) block++;
+    
+    start = block * coreid;
+    end   = start + block;
+    
+    if (end > lda) end = lda;
+    
+    //for (int row=0; row<NROW; row++) {
+    for (int row = start; row < end; row++) {
+        double sum = 0;
+        for (int idx=ptr[row]; idx<ptr[row+1]; idx++) 
+            sum += val[idx] * x[col[idx]] ;
+        y[row] = sum;
+    }
+
+}

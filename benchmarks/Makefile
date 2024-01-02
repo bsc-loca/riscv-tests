@@ -49,6 +49,7 @@ bmarks = 			\
 	mt-int-sort   	\
 	mt-blackscholes \
 	mt-jacobi_2d   	\
+	mt-spmv      	\
 	#pmp \
 #--------------------------------------------------------------------
 # Build rules
