@@ -6,6 +6,7 @@
 #
 ENDMSG
 
+use List::Util qw(shuffle);
 use strict "vars";
 use warnings;
 no  warnings("once");
@@ -29,7 +30,7 @@ sub usage()
   print "  --row   Number of rows in the Sparse Matrix [64]\n";
   print "  --col   Number of columns in the Sparse Matrix [512]\n";
   print "  --seed  random seed [1]\n";
-  print "  --Dtype Data type [double] , float, int\n";
+  print "  --Dtype Data type [double] \n";
   print "$usageMsg";
 
   exit();
@@ -39,15 +40,15 @@ sub processCommandLine()
 {
 
   $opts{"help"} = 0;
-  $opts{"nnz"} = 2048;
+  $opts{"nnz"} = 4096;
   $opts{"row"} = 64;
-  $opts{"col"} = 512;
+  $opts{"col"} = 2048;
   $opts{"seed"} = 1;
   $opts{"Dtype"} = "double";
   Getopt::Long::GetOptions( \%opts, 'help|?', 'nnz:i', 'row:i', 'col:i', 'seed:i', 'Dtype:s' ) or usage();
   $opts{"help"} and usage();
   
-  my @types=('double','int','float');
+  my @types=('double');
   unless ( grep( /^$opts{Dtype}$/, @types ) ) {
      print "Error: $opts{Dtype} is an unsupported data type. Valid values are @types\n";
      exit ();
@@ -119,6 +120,13 @@ sub distribute_non_uniformly {
     my ($total_elements, $num_containers, $max) = @_;
 
     my @containers = ();  # Array to store the number of elements in each container
+    my @cont_id; ## random containers
+    
+    for my $i (0 .. $num_containers-2) {
+        push @cont_id, $i;
+        push @containers, 0;
+    }
+    @cont_id = shuffle(@cont_id);
 
     # Distribute elements non-uniformly among containers
     for (my $i = 0; $i < $num_containers - 1; $i++) {
@@ -135,7 +143,7 @@ sub distribute_non_uniformly {
         
         # Subtract the assigned elements from the total and store in the container
         $total_elements -= $elements;
-        push @containers, $elements;
+        splice (@containers,$cont_id[$i],1,$elements);
     }
 
     # The last container gets the remaining elements
@@ -266,10 +274,13 @@ sub main()
     print  "#define NROW ".($opts{"row"})." \n";
     print  "#define NCOL ".($opts{"col"})." \n";
     print  "#define NNZ " .($opts{"nnz"})." \n\n";
+    
+    print  "#define DATA_TYPE \n\n";
+    
     print  "typedef $opts{Dtype} data_t;\n\n";
 
-    printArray( "ptr", \@PTR, "NROW+1", "int" );
-    printArray( "col", \@COL, "NNZ", "int" );
+    printArray( "ptr", \@PTR, "NROW+1", "long" );
+    printArray( "col", \@COL, "NNZ", "long" );
     printArray( "val", \@VAL, "NNZ", "data_t" );
     printArray( "x", \@X, "NCOL", "data_t" );
     printArray( "y", \@Y, "NROW", "data_t" );
