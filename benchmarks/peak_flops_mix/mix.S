@@ -1,12 +1,12 @@
 .global asm_basic_loop
 asm_basic_loop:
-  li x20, 0x4010000000000000
-  li x21, 0x4000000000000000
-  li x22, 0x4020000000000000
-  fmv.d.x f18, x20
-  fmv.d.x f19, x21
-  fmv.d.x f20, x22
-  xor x5, x5, x5
+  li t0, 0x4010000000000000
+  li t1, 0x4000000000000000
+  li t2, 0x4020000000000000
+  fmv.d.x f18, t0
+  fmv.d.x f19, t1
+  fmv.d.x f20, t2
+  xor t3, t3, t3
   blez a0, fin_loop
 ini_loop:
   fsqrt.d f0, f18
@@ -32,7 +32,7 @@ ini_loop:
   fsub.d f28, f28, f28
   fdiv.d  f11, f19, f20
   fsub.d f29, f29, f29
-  addi x5,x5,1
-  bne  x5,a0, ini_loop
+  addi t3,t3,1
+  bne  t3,a0, ini_loop
 fin_loop:
   ret
