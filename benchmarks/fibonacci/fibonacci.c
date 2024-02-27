@@ -2,6 +2,12 @@
 #include <sys/times.h>
 #include "util.h"
 
+#ifdef SMALL_TESTS
+#define N 10
+#else
+#define N 25
+#endif
+
 static int fib(int i) {return (i>1) ? fib(i-1) + fib(i-2) : i;}
 
 int main() {
@@ -9,8 +15,8 @@ int main() {
     int aux,i,j;
     int result; 
     
-    int n=25;
-    int A[25];
+    int n=N;
+    int A[N];
 
     printf("\n   *** FIBONACCI BENCHMARK TEST ***\n\n");
     printf("RESULTS OF THE TEST:\n");
