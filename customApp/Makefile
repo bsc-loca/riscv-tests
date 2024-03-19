@@ -19,8 +19,9 @@ instbasedir = $(UCB_VLSI_HOME)/install
 #--------------------------------------------------------------------
 
 # Original lista for references	
-bmarks = 	\
-	amat   	\
+bmarks = 		\
+	amat   		\
+	inst_stress \
 
 #--------------------------------------------------------------------
 # Build rules
