@@ -10,5 +10,6 @@ extern void __attribute__((noinline)) atomic_xor      (const size_t size , data_
 extern void __attribute__((noinline)) atomic_mix      (const size_t size , data_t A[], data_t B[], data_t AB[]); 
 extern void __attribute__((noinline)) scalar_mix      (const size_t size , data_t A[], data_t B[], data_t AB[]); 
 extern void __attribute__((noinline)) median          (int n, int input[], int verify[]);
+extern void __attribute__((noinline)) jacobi_2d       (int lda, double A[], double B[], double verify[]);
 
 #endif //__INST_H

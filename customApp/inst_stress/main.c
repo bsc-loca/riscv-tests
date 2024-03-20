@@ -4,10 +4,13 @@
 #include "spmv.h"
 #include "inst_stress.h"
 #include "util.h"
-
+#include "metrics.h"
 
 int main( int argc, char* argv[] )
 {
+    
+    roi_start();
+    
     stream_copy(ARRAY_SIZE,dataA,dataB);
     
     stream_copy_inv(ARRAY_SIZE,dataA,dataC);
@@ -23,8 +26,13 @@ int main( int argc, char* argv[] )
     atomic_xor(ARRAY_SIZE,dataB,dataA);
     
     atomic_mix(ARRAY_SIZE,dataA,dataB,dataC);
+
+    jacobi_2d(DIM_SIZE,input2_data,input1_data,verify_data1);
     
     scalar_mix(ARRAY_SIZE,dataA,dataB,dataC);
+
+    roi_end();
+    print_metrics("inst_stress");
     
     exit(0);
 }
@@ -340,4 +348,24 @@ void median(int n, int input[], int verify[])
             exit(1);
         }
     }
+}
+
+//**********************************************************************
+void jacobi_2d(int lda, double A[], double B[], double verify[])
+{
+
+    for (int k = 1; k < lda - 1 ; k++ ) 
+            for (int i = 1; i < lda - 1 ; i++ ) 
+                A[i+k*lda] = (0.2) * (B[i+k*lda] + B[(i+k*lda)-1] + B[(i+k*lda)+1] + B[(i+k*lda)-lda] + B[(i+k*lda)+lda]);
+
+    // verification
+    for (int j = 0; j < lda*lda ; j++) 
+    {
+        if (A[j] != verify[j]) 
+        {
+            printf("Error jacobi_2d %d \n",j);
+            exit(1);
+        }
+    }
+
 }
