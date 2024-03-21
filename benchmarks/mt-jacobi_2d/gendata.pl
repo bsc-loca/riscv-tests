@@ -167,9 +167,13 @@ sub main()
   for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
     for ( my $j = 0; $j < $opts{"size"}; $j++ ) {
       $mat_values1->[$i][$j]     = ($i*($j+2) + 2) / $opts{"size"} ;
-      $mat_values1_tmp->[$i][$j] = ($i*($j+2) + 2) / $opts{"size"} ;
       $mat_values2->[$i][$j]     = ($i*($j+3) + 3) / $opts{"size"} ;
-      $mat_values2_tmp->[$i][$j] = ($i*($j+3) + 3) / $opts{"size"} ;
+    }
+  }
+  for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"size"}; $j++ ) {
+      $mat_values1_tmp->[$i][$j] = $mat_values1->[$i][$j] ;
+      $mat_values2_tmp->[$i][$j] = $mat_values2->[$i][$j] ;
     }
   }
 
