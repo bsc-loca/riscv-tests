@@ -157,7 +157,7 @@ int verify_blackscholes(int nc, int cid, data_t priceDelta[])
     int numError = 0;
 
     for (int i=start; i<end; i++) {
-        if(cid==0) printf(" %d ",priceDelta[i]); 
+        //if(cid==0) printf(" %d ",priceDelta[i]); 
         if( fabs(priceDelta[i]) >= 1e-4 ) numError ++;
     }
     return numError;
