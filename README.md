@@ -48,7 +48,7 @@ Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton 
 | 17  |fd-spmv         | double   | 135 KB       |
 | 18  |fd-vvadd        | float    | 24 KB        |
 | 19  |mt-axpy         | double   | 256 KB       |
-| 20  |mt-blackscholes | float    |              |
+| 20  |mt-blackscholes | float    | 64 KB        |
 | 21  |mt-histogram    | int      | 64 KB        |
 | 22  |mt-int-sort     | int      | 64 KB        |
 | 23  |mt-jacobi\_2d   | double   | 64 KB        |
