@@ -1,7 +1,12 @@
 RISC-V ISA tests and Benchmarks
 ================
 
-Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton framework.
+RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
+
+### Set RISC-V environment
+
+    export RISCV=/path/to/installation/directory
+    export PATH=$RISCV/bin:$PATH
 
 ### Build ISA tests
 
@@ -13,7 +18,7 @@ Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton 
     cd benchmarks
     make -j$(nproc)
 
-### Build Benchmarks (multi-core)
+### Build Benchmarks (multi-thread)
 
     make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4
 
@@ -21,11 +26,14 @@ Modification of RISCV ISA tests and Benchmarks to be compatibles with OpenPiton 
 
     make -j$(nproc) fpga
 
-### Build Benchmarks to use in FPGA (multi-core)
+### Build Benchmarks to use in FPGA (multi-thread)
 
     make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4 fpga
 
-### Available Benchmarks
+
+Available Benchmarks
+=============================
+
 
 | No  | Benchmark      |Data Type | Problem Size | 
 |-----|----------------|----------|--------------|
