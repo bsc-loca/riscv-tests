@@ -13,7 +13,7 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
     cd isa
     make -j$(nproc)
 
-### Build Benchmarks (single-core)
+### Build Benchmarks (single-thread)
 
     cd benchmarks
     make -j$(nproc)
@@ -22,7 +22,7 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 
     make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4
 
-### Build Benchmarks to use in FPGA (single-core)
+### Build Benchmarks to use in FPGA (single-thread)
 
     make -j$(nproc) fpga
 
@@ -34,6 +34,7 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 Available Benchmarks
 =============================
 
+### Integer operations (single-thread)
 
 | No  | Benchmark      |Data Type | Problem Size | 
 |-----|----------------|----------|--------------|
@@ -49,23 +50,33 @@ Available Benchmarks
 | 10  |int-multiply    | int      | 24 KB        |
 | 11  |int-spmv        | long     | 135 KB       |
 | 12  |int-vvadd       | int      | 24 KB        |
-| 13  |fd-bubblesort   | double   | 8 KB         |
-| 14  |fd-matrix\_mult | float    | 48 KB        |
-| 15  |fd-median       | float    | 32 KB        |
-| 16  |fd-multiply     | double   | 24 KB        |
-| 17  |fd-spmv         | double   | 135 KB       |
-| 18  |fd-vvadd        | float    | 24 KB        |
-| 19  |mt-axpy         | double   | 256 KB       |
-| 20  |mt-blackscholes | float    | 64 KB        |
-| 21  |mt-histogram    | int      | 64 KB        |
-| 22  |mt-int-sort     | int      | 64 KB        |
-| 23  |mt-jacobi\_2d   | double   | 64 KB        |
-| 24  |mt-matmul       | double   | 96 KB        |
-| 25  |mt-somier       | double   | 93 KB        |
-| 26  |mt-stream-copy  | double   | 256 KB       |
-| 27  |mt-stream-triad | double   | 192 KB       |
-| 28  |mt-vvadd        | double   | 96 KB        |
-| 29  |mm              | double   | 13 KB        |
+
+### Floating-point operations (single-thread)
+
+| No | Benchmark      |Data Type | Problem Size | 
+|----|----------------|----------|--------------|
+| 1  |fd-bubblesort   | double   | 8 KB         |
+| 2  |fd-matrix\_mult | float    | 48 KB        |
+| 3  |fd-median       | float    | 32 KB        |
+| 4  |fd-multiply     | double   | 24 KB        |
+| 5  |fd-spmv         | double   | 135 KB       |
+| 6  |fd-vvadd        | float    | 24 KB        |
+
+### Multi-thread Benchmarks 
+
+| No  | Benchmark      |Data Type | Problem Size | 
+|-----|----------------|----------|--------------|
+| 1   |mt-axpy         | double   | 256 KB       |
+| 2   |mt-stream-copy  | double   | 256 KB       |
+| 3   |mt-stream-triad | double   | 192 KB       |
+| 4   |mt-vvadd        | double   | 96 KB        |
+| 5   |mt-blackscholes | float    | 64 KB        |
+| 6   |mt-jacobi\_2d   | double   | 64 KB        |
+| 7   |mt-matmul       | double   | 96 KB        |
+| 8   |mt-somier       | double   | 93 KB        |
+| 9   |mt-histogram    | int      | 64 KB        |
+| 10  |mt-int-sort     | int      | 64 KB        |
+| 11  |mm              | double   | 13 KB        |
 
 
 
