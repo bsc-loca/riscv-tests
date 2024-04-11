@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "dataset.h"
-//#include "spm0.h"
+#include "inputs/spm0.h"
 
 #include "util.h"
 #include "double_cmp.h"
