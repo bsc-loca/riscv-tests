@@ -45,6 +45,8 @@ bmarks = \
 	peak_flops_mix \
 	peak_mips \
 	spmv_fp \
+	hello \
+	acdc_conflicts \
 	coremark
 
 #--------------------------------------------------------------------
