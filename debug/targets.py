@@ -152,6 +152,7 @@ class Target:
         self.server_cmd = parsed.server_cmd
         self.sim_cmd = parsed.sim_cmd
         self.debug_server = parsed.debug_server
+        self.no_post_mortem = parsed.no_post_mortem
         self.temporary_binary = None
         self.compiler_supports_v = True
         Target.isolate = parsed.isolate
@@ -257,6 +258,8 @@ def add_target_options(parser):
             help="The command to use to start the debug server (e.g. OpenOCD)")
     parser.add_argument("--debug_server", action="store_true",
             help="Open gdb in a separate terminal on the debug server")
+    parser.add_argument("--no_post_mortem", action="store_true",
+            help="Avoid the post mortem function after a fail")
 
     xlen_group = parser.add_mutually_exclusive_group()
     xlen_group.add_argument("--32", action="store_const", const=32,

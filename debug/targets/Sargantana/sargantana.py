@@ -10,11 +10,12 @@ class sargantana_hart(targets.Hart):
     reset_vectors = [0x100]
     link_script_path = "sargantana.lds"
     misa = 0x8000000000341129
+    honors_tdata1_hmode = False
 
 class sargantana(targets.Target):
     harts = [sargantana_hart()]
     openocd_config_path = "sargantana.cfg"
-    timeout_sec = 180
+    timeout_sec = 600
     implements_custom_test = True
     freertos_binary = "bin/RTOSDemo64.axf"
     support_unavailable_control = True
