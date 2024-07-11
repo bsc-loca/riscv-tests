@@ -291,6 +291,61 @@ class VerilatorSim:
             self.process.wait()
         except OSError:
             pass
+
+class FPGAEmulation:
+    # pylint: disable-next=consider-using-with
+    logfile = tempfile.NamedTemporaryFile(prefix='sim', suffix='.log')
+    logname = logfile.name
+    lognames = [logname]
+
+    def __init__(self, sim_cmd=None, debug=False, timeout=300):
+        real_stdout.write(f"Load binary to fpga and reset the design\n")
+        if sim_cmd:
+            cmd = shlex.split(sim_cmd)
+        else:
+            cmd = [""]
+
+        real_stdout.write(f"Load command: {cmd}\n")
+        # pylint: disable-next=consider-using-with
+        logfile = open(self.logname, "w", encoding='utf-8')
+        if print_log_names:
+            real_stdout.write(f"Temporary FPGA log: {self.logname}\n")
+        logfile.write("+ " + " ".join(cmd) + "\n")
+        logfile.flush()
+
+        with open(self.logname, "r", encoding='utf-8') as listenfile:
+            listenfile.seek(0, 2)
+            # pylint: disable-next=consider-using-with
+            self.process = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                    stdout=logfile, stderr=logfile)
+            done = False
+            start = time.time()
+            while not done:
+                # Fail if VCS exits early
+                exit_code = self.process.poll()
+                if exit_code is not None:
+                    raise RuntimeError(
+                        f'FPGA load exited early with status {exit_code}')
+
+                line = listenfile.readline()
+                if not line:
+                    time.sleep(1)
+                match = re.match(r"^Listening on port (\d+)$", line)
+                if match:
+                    done = True
+                    self.port = int(match.group(1))
+                    os.environ['JTAG_VPI_PORT'] = str(self.port)
+
+                if (time.time() - start) > timeout:
+                    raise TestLibError(
+                        "Timed out waiting for FPGA to listen for JTAG vpi")
+
+    def __del__(self):
+        try:
+            self.process.kill()
+            self.process.wait()
+        except OSError:
+            pass
 class VcsSim:
     # pylint: disable-next=consider-using-with
     logfile = tempfile.NamedTemporaryFile(prefix='simv', suffix='.log')
