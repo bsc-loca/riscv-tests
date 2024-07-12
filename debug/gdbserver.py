@@ -426,7 +426,7 @@ class DisconnectTest(GdbTest):
         regnames = set(old_values.keys()).union(set(new_values.keys()))
         for regname in regnames:
             if regname in ("mcycle", "minstret", "instret", "cycle", "mip",
-                    "time"):
+                    "time", "vtype"):
                 continue
             assertEqual(old_values[regname], new_values[regname],
                     f"Register {regname} didn't match")

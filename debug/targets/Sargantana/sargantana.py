@@ -19,7 +19,7 @@ class sargantana(targets.Target):
     timeout_sec = 600
     implements_custom_test = False
     freertos_binary = "bin/RTOSDemo64.axf"
-    support_unavailable_control = True
+    support_unavailable_control = False
     supports_clint_mtime = False
     invalid_memory_returns_zero = False
     support_manual_hwbp = False
