@@ -303,7 +303,8 @@ class FPGAEmulation:
         if sim_cmd:
             cmd = shlex.split(sim_cmd)
         else:
-            cmd = [""]
+            raise TestLibError(
+                        "Invalid command for loading a binary to FPGA")
 
         real_stdout.write(f"Load command: {cmd}\n")
         # pylint: disable-next=consider-using-with
@@ -324,17 +325,18 @@ class FPGAEmulation:
                 # Fail if VCS exits early
                 exit_code = self.process.poll()
                 if exit_code is not None:
-                    raise RuntimeError(
-                        f'FPGA load exited early with status {exit_code}')
+                    if exit_code is 0:
+                        done = True
+                    else:
+                        raise RuntimeError(
+                            f'FPGA load exited early with status {exit_code}')
 
                 line = listenfile.readline()
                 if not line:
                     time.sleep(1)
-                match = re.match(r"^Listening on port (\d+)$", line)
+                match = re.match(r"^Removing ./osbi.bin image", line)
                 if match:
                     done = True
-                    self.port = int(match.group(1))
-                    os.environ['JTAG_VPI_PORT'] = str(self.port)
 
                 if (time.time() - start) > timeout:
                     raise TestLibError(
