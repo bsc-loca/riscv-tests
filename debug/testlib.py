@@ -325,7 +325,7 @@ class FPGAEmulation:
                 # Fail if VCS exits early
                 exit_code = self.process.poll()
                 if exit_code is not None:
-                    if exit_code is 0:
+                    if exit_code == 0:
                         done = True
                     else:
                         raise RuntimeError(
