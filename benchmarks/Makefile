@@ -42,6 +42,7 @@ bmarks = 			\
 	fd-bubblesort  	\
 	int-bubblesort  \
 	hello_world  	\
+	mt-hello_world  \
 	mt-axpy   		\
 	mt-somier   	\
 	mt-stream-copy  \
