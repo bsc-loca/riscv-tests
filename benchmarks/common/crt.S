@@ -76,8 +76,8 @@ _start:
   li  x30,0
   li  x31,0
 
-  # enable FPU and accelerator if present
-  li t0, MSTATUS_FS | MSTATUS_XS
+  # enable FPU, vector, and accelerator if present
+  li t0, MSTATUS_FS | MSTATUS_XS | MSTATUS_VS
   csrs mstatus, t0
 
   # make sure XLEN agrees with compilation choice
@@ -156,11 +156,11 @@ _start:
 
   # give each core 128KB of stack + TLS
 #define STKSHIFT 17
-  sll a2, a0, STKSHIFT
-  add tp, tp, a2
   add sp, a0, 1
   sll sp, sp, STKSHIFT
   add sp, sp, tp
+  sll a2, a0, STKSHIFT
+  add tp, tp, a2
 
   j _init
 
