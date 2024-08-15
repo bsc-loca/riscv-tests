@@ -7,7 +7,8 @@
 #define DIM_SIZE 64 
 
 
-typedef double data_t;static data_t input1_data[ARRAY_SIZE] = 
+typedef double data_t; 
+static data_t input1_data[ARRAY_SIZE] = 
 {
     0,   3,   2,   0,   3,   1,   0,   3,   2,   3,   2,   0,   3,   3,   1,   2,   3,   0,   0,   1, 
     1,   1,   2,   3,   1,   2,   3,   1,   1,   3,   2,   2,   0,   1,   3,   2,   2,   2,   0,   0, 
@@ -633,6 +634,8 @@ static data_t verify_data[ARRAY_SIZE] =
   161, 174, 145, 171, 147, 184, 149, 191, 153, 145, 145, 125, 157, 137, 168, 172, 153, 158, 159, 160, 
   142, 134, 193, 167, 175, 166, 179, 182, 138, 173, 180, 134, 134, 158, 161, 163
 };
+
+static data_t results_data[ARRAY_SIZE] = {0}; 
 
 
 #endif //__DATASET_H

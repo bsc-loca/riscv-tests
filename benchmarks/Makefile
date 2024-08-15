@@ -14,30 +14,32 @@ src_dir = .
 
 # Original lista for references	
 bmarks = 			\
-	fp-bsort  		\
-	histogram   	\
-	mt-histogram   	\
-	int-median 		\
-	fd-median 		\
-	qsort 			\
-	rsort 			\
-	towers 			\
-	int-vvadd 		\
-	fd-vvadd 		\
-	int-multiply 	\
-	fd-multiply 	\
-	mm 				\
+	hello_world  	\
 	dhrystone 		\
-	fd-spmv 		\
+	fibonacci  		\
+	rsort 			\
+	binmultiply 	\
+	histogram   	\
+	towers 			\
+	int-bsort  		\
+	int-qsort 		\
+	int-matmult 	\
+	int-median 		\
+	int-multiply 	\
 	int-spmv 		\
+	int-vvadd 		\
+	fp-bsort  		\
+	fp-qsort 		\
+	fp-matmult 		\
+	fp-median 		\
+	fp-multiply 	\
+	fp-spmv 		\
+	fp-vvadd 		\
+	mm 				\
+	mt-hello_world  \
+	mt-histogram   	\
 	mt-vvadd 		\
 	mt-matmul 		\
-	fd-matrix_mult 	\
-	int-matrix_mult \
-	fibonacci  		\
-	int-bubblesort  \
-	hello_world  	\
-	mt-hello_world  \
 	mt-axpy   		\
 	mt-somier   	\
 	mt-stream-copy  \

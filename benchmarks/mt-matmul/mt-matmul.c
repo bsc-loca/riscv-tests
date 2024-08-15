@@ -36,7 +36,7 @@
 //--------------------------------------------------------------------------
 // matmul function
  
-extern void matmul(const size_t coreid, const size_t ncores, const size_t lda,  const data_t A[], const data_t B[], data_t C[] );
+extern void __attribute__((noinline)) matmul(const size_t coreid, const size_t ncores, const size_t lda,  const data_t *A, const data_t *B, data_t *C);
 
 
 //--------------------------------------------------------------------------
@@ -46,31 +46,14 @@ extern void matmul(const size_t coreid, const size_t ncores, const size_t lda,  
 // differentiate between threads (each thread is running on a separate core).
 
 int main(int argc, char** argv) {
-  int cid;
-  int nc;
-  static data_t results_data[ARRAY_SIZE];
-
-  // synchronization variable
-  volatile static uint32_t amo_cnt = 0;
-
-  cid = argv[0][0];
-  nc = argv[0][1];
+  int cid = argv[0][0];
+  int nc = argv[0][1];
   
   stats(matmul(cid, nc, DIM_SIZE, input1_data, input2_data, results_data); barrier(nc), DIM_SIZE/DIM_SIZE/DIM_SIZE);  
  
   int res = verifyDouble(ARRAY_SIZE, results_data, verify_data);
 
-  if(cid==0)
-  {
-      if (res!=0) printf("Error \n"); 
-  }
- 
-  //while(argv[0][0] != amo_cnt);
-  //printf("Completed, this is hart %d of %d harts!\n", argv[0][0], argv[0][1]);
-  // increment atomic counter
-  //ATOMIC_OP(amo_cnt, 1, add, w);
-
-  return 0;
+  exit(res);
 }
 
 

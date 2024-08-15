@@ -14,7 +14,7 @@ void histogram_block(double *x, double *y, long N) {
 */
 
 
-void histogram(const size_t coreid, const size_t ncores,const size_t lda , data_t A[], unsigned int R[] ){
+void histogram(const size_t coreid, const size_t ncores, const size_t lda , data_t *A, unsigned int *R){
 
     size_t i, k, block, start, end;
        
@@ -30,6 +30,17 @@ void histogram(const size_t coreid, const size_t ncores,const size_t lda , data_
     }
 }
 
+void clear (const size_t coreid, const size_t ncores, size_t lda, uint32_t *data){
+    size_t i, k, block, start, end;
+       
+    block = lda / ncores;
+    if ((block*ncores) != lda) block++;
+    start = block * coreid;
+    end   = start + block;
+    if (end > lda) end = lda;
+    
+    for (i= start; i<end; i++) data[i] = 0;
+}
 
 
 

@@ -17,7 +17,7 @@ int main(int argc, char ** argv) {
 
     if(cid==0) 
     {
-        printf("\nWe are %d Lagarto Ka cores.\n\n",nc);
+        printf("\nWe are %d cores.\n\n",nc);
         printf("+----------------------------------------------------+  \n");
         printf("     .-.--_                                             \n");    
         printf("  ,´,´.´   `.  BSC-CNS Barcelona Supercomputing Center  \n");   
@@ -30,7 +30,7 @@ int main(int argc, char ** argv) {
 
     for(int i=0; i<nc; i++)
     {
-        if(cid==i) printf("I am the Lagarto Ka No. %d: hello world!. \n",cid);
+        if(cid==i) printf("I am the core No. %d: hello world!. \n",cid);
         barrier(nc);
     }
     

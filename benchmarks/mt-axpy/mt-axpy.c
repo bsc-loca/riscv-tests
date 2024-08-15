@@ -27,7 +27,7 @@
    
 //--------------------------------------------------------------------------
 // axpy function
-extern void __attribute__((noinline)) axpy(const size_t coreid, const size_t ncores, const size_t lda, data_t A[], data_t B[], data_t alpha);
+extern void __attribute__((noinline)) axpy(const size_t coreid, const size_t ncores, const size_t lda, data_t *A, data_t *B, data_t alpha);
 
 //--------------------------------------------------------------------------
 // verification function
@@ -42,18 +42,17 @@ int main(int argc, char** argv) {
     uint32_t nc  = argv[0][1];
      
     if(cid==0) printf("\nWe are %d cores.\n",nc);
-    barrier(nc);        
-   
+    barrier(nc);
+
+#if PREALLOCATE
+    mt_verify(cid,nc,ARRAY_SIZE,input1_data,input1_data);
+    barrier(nc);
+#endif
     stats(axpy(cid,nc,ARRAY_SIZE,input1_data,input2_data,Alfa); barrier(nc), ARRAY_SIZE); // ROI
     barrier(nc); // barrier to ROI sync
   
     int res = mt_verify(cid,nc,ARRAY_SIZE,input1_data,verify_data);
     barrier(nc);        
-    
-    if(res){
-        printf("Core %d: Verification failed!\n",cid);
-        exit(res);  
-    }
    
-    exit(0);  
+    exit(res);  
 }

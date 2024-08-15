@@ -4,20 +4,24 @@
 #include "util.h"
 #include <stddef.h>
 
-#pragma GCC optimize ("unroll-loops")
 
-void matmul(const size_t coreid, const size_t ncores, const size_t lda,  const data_t A[], const data_t B[], data_t C[])
+void matmul(const size_t coreid, const size_t ncores, const size_t lda,  const data_t *A, const data_t *B, data_t *C)
 {
-  size_t i, j, k;
-  size_t block = lda / ncores;
-  size_t start = block * coreid;
+    size_t i, j, k;
+    size_t  block, start, end;
+      
+    block = lda / ncores;
+    if ((block*ncores) != lda) block++;
+    start = block * coreid;
+    end   = start + block;
+    if (end > lda) end = lda;
+  
  
-  for (i = 0; i < lda; i++) {
-    for (j = start; j < (start+block); j++) {
-      data_t sum = 0;
-      for (k = 0; k < lda; k++)
-        sum += A[j*lda + k] * B[k*lda + i];
-      C[i + j*lda] = sum;
+    for ( j = start; j < end; j++ ) {
+        for ( k = 0; k < lda; k++ )  {
+            for ( i = 0; i < lda; i++ ) {
+                C[i + j*lda] += A[j*lda + k] * B[k*lda + i];
+            }
+        }
     }
-  }
 }

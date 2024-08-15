@@ -74,11 +74,10 @@ extern void setStats(int enable);
 
 #define static_assert(cond) switch(0) { case 0: case !!(long)(cond): ; }
 
-static int verify(int n, const volatile long* test, const long* verify)
+static int verify(size_t n, const volatile long* test, const long* verify)
 {
-  int i;
   // Unrolled for faster verification
-  for (i = 0; i < n/2*2; i+=2)
+  for (size_t i = 0; i < n/2*2; i+=2)
   {
     long t0 = test[i], t1 = test[i+1];
     long v0 = verify[i], v1 = verify[i+1];
@@ -121,11 +120,10 @@ static int verifyDouble(size_t n, const volatile double* test, const double* ver
   return 0;
 }
 
-static int verifyFloat(int n, const volatile float* test, const float* verify)
+static int verifyFloat(size_t n, const volatile float* test, const float* verify)
 {
-  int i;
   // Unrolled for faster verification
-  for (i = 0; i < n/2*2; i+=2)
+  for (size_t i = 0; i < n/2*2; i+=2)
   {
     float t0 = test[i], t1 = test[i+1];
     float v0 = verify[i], v1 = verify[i+1];

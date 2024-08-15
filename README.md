@@ -20,7 +20,7 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 
 ### Build Benchmarks (multi-thread)
 
-    make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4
+    make -j$(nproc) GCC_OPT=-DNUMTILES=4
 
 ### Build Benchmarks to use in FPGA (single-thread)
 
@@ -28,7 +28,15 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 
 ### Build Benchmarks to use in FPGA (multi-thread)
 
-    make -j$(nproc) NUMTILES=-DPITON_NUMTILES=4 fpga
+    make -j$(nproc) GCC_OPT=-DNUMTILES=4 fpga
+
+### Build Benchmarks with the Cache Warm-up enabled (single-thread - multi-thread - FPGA)
+
+    make -j$(nproc) GCC_OPT=-DPREALLOCATE
+    make -j$(nproc) GCC_OPT="-DPREALLOCATE -DNUMTILES=4"
+    make -j$(nproc) GCC_OPT=-DPREALLOCATE fpga
+    make -j$(nproc) GCC_OPT="-DPREALLOCATE -DNUMTILES=4" fpga
+
 
 
 Available Benchmarks
@@ -39,28 +47,30 @@ Available Benchmarks
 | No  | Benchmark      |Data Type | Problem Size | 
 |-----|----------------|----------|--------------|
 | 1   |dhrystone       | int      | 1k runs      | 
-| 2   |fibonacci       | int      | 25 numbers   |
-| 3   |histogram       | uint8\_t | 16 KB        |
-| 4   |qsort           | int      | 32 KB        |
-| 5   |rsort           | int      | 32 KB        |
-| 6   |towers          | int      | 7 Discs, 40 runs  |
-| 7   |int-bubblesort  | long     | 8 KB         |
-| 8   |int-matrix\_mult| int      | 48 KB        |
-| 9   |int-median      | int      | 32 KB        |
-| 10  |int-multiply    | int      | 24 KB        |
-| 11  |int-spmv        | long     | 135 KB       |
-| 12  |int-vvadd       | int      | 24 KB        |
+| 2   |fibonacci       | int      | 16 numbers   |
+| 3   |towers          | int      | 10 Discs     |
+| 4   |binmultiply     | int      | 24 KB        |
+| 5   |histogram       | uint32\_t | 64 KB        |
+| 6   |rsort           | uint32\_t | 32 KB        |
+| 7   |int-bsort       | long     | 4 KB         |
+| 8   |int-qsort       | long     | 32 KB        |
+| 9   |int-matmult     | int      | 12 KB        |
+| 10  |int-median      | int      | 32 KB        |
+| 11  |int-multiply    | int      | 24 KB        |
+| 12  |int-spmv        | long     | 135 KB       |
+| 13  |int-vvadd       | int      | 24 KB        |
 
 ### Floating-point operations (single-thread)
 
 | No | Benchmark      |Data Type | Problem Size | 
 |----|----------------|----------|--------------|
-| 1  |fd-bubblesort   | double   | 8 KB         |
-| 2  |fd-matrix\_mult | float    | 48 KB        |
-| 3  |fd-median       | float    | 32 KB        |
-| 4  |fd-multiply     | double   | 24 KB        |
-| 5  |fd-spmv         | double   | 135 KB       |
-| 6  |fd-vvadd        | float    | 24 KB        |
+| 1  |fp-bsort        | double   | 4 KB         |
+| 2  |fp-qsort        | double   | 32 KB        |
+| 3  |fp-matmult      | float    | 12 KB        |
+| 4  |fp-median       | float    | 32 KB        |
+| 5  |fp-multiply     | float    | 24 KB        |
+| 6  |fd-spmv         | double   | 135 KB       |
+| 7  |fd-vvadd        | float    | 24 KB        |
 
 ### Multi-thread Benchmarks 
 
@@ -90,16 +100,15 @@ Available Benchmarks
 | bcsstk39   | 46772  | 46772  | 1068033 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Boeing/bcsstk39.html) | 17 MB |
 | Lin        | 256000 | 256000 | 1011200 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Lin/Lin.html) | 21 MB |
 
+  
+   
+   
 
 
 
 =========================       ========================= 
 
-*
-
-*
-
-*
+**ooooooooooooooooooooooooooooooooooooooooooooooooooooo**
 
 =========================       ========================= 
 

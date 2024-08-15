@@ -1,21 +1,5 @@
 // See LICENSE for license details.
 
-//**************************************************************************
-// Multi-threaded axpy benchmark
-//--------------------------------------------------------------------------
-// 
-//  
-//
-//
-// This benchmark This benchmark runs several AXPY operations in parallle. AXPY is a Level 1 operation in the
-// Basic Linear Algebra Subprograms (BLAS) package, and is a common operation in
-//computations with vector processors. AXPY is a combination of scalar
-//multiplication and vector addition. The input data (and reference data) should be generated
-// using the axpy_gendata.pl perl script 
-
-//--------------------------------------------------------------------------
-// Includes 
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,9 +22,9 @@
 //--------------------------------------------------------------------------
 // axpy function
  
-extern void __attribute__((noinline)) histogram(const size_t coreid, const size_t ncores,const size_t lda , data_t A[], unsigned int R[] );
-
-extern int   mt_verify(const size_t coreid, const size_t ncores,const size_t lda , data_t* test,   data_t* verify );
+extern void __attribute__((noinline)) histogram(const size_t coreid, const size_t ncores, const size_t lda , data_t *A, unsigned int *R);
+extern void clear (const size_t coreid, const size_t ncores, size_t lda, uint32_t *data);
+extern int mt_verify(const size_t coreid, const size_t ncores,const size_t lda , data_t* test,   data_t* verify );
 
 //==================================================
 
@@ -52,16 +36,16 @@ int main(int argc, char** argv) {
    if(cid==0) {printf("We are %d cores.\n",nc);}  
    barrier(nc);        
    
+#if PREALLOCATE
+   stats(histogram(cid,nc,ARRAY_SIZE,input_data,result_data); barrier(nc),ARRAY_SIZE);
+   clear(cid,nc,HISTOGRAM_SIZE,result_data);
+   barrier(nc);        
+#endif
    stats(histogram(cid,nc,ARRAY_SIZE,input_data,result_data); barrier(nc),ARRAY_SIZE);
    barrier(nc);        
    
    int res = mt_verify(cid,nc,HISTOGRAM_SIZE , result_data, verify_data);
-   if(res){
-       printf("Verrification failed!\n");
-       exit(res);  
-   } 
    barrier(nc);        
    
-   exit(0);    
-   
+   exit(res);    
 }

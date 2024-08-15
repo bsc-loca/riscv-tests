@@ -1,19 +1,21 @@
 // See LICENSE for license details.
 
+#include <stddef.h>
+#include "dataset.h"
 //**************************************************************************
 // Median filter (c version)
 //--------------------------------------------------------------------------
 
-void median( int n, int input[], int results[] )
+void median(size_t n, data_t *input, data_t *results)
 {
-  int A, B, C, i;
+  data_t A, B, C;
 
   // Zero the ends
   results[0]   = 0;
   results[n-1] = 0;
 
   // Do the filter
-  for ( i = 1; i < (n-1); i++ ) {
+  for (size_t i = 1; i < (n-1); i++ ) {
 
     A = input[i-1];
     B = input[i];

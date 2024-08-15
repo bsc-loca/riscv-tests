@@ -174,7 +174,7 @@ sub main()
 
   
 
-  print  "\n#ifndef __DATASET_H";
+  print  "#ifndef __DATASET_H";
   print  "\n#define __DATASET_H";
   print  "\n\#define ARRAY_SIZE ".($opts{"size"})." \n";
   print  "\n\#define Alfa  $Alfa\n\n";
@@ -186,7 +186,7 @@ sub main()
   printArray( "input2_data", \@Y );
   printArray( "verify_data", \@R);
 
-  print  "\n#endif //__DATASET_H";
+  print  "\n#endif //__DATASET_H \n";
  
 }
 

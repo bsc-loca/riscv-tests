@@ -13,19 +13,14 @@
 // disc on top of a smaller disc.
 //
 // This implementation starts with NUM_DISC discs and uses a recursive
-// algorithm to sovel the puzzle.  The smips-gcc toolchain does not support
-// system calls so printf's can only be used on a host system, not on the
-// smips processor simulator itself. You should not change anything except
-// the HOST_DEBUG and PREALLOCATE macros for your timing run.
+// algorithm to sovel the puzzle.
 
-#include <stdlib.h>
+#include <stdio.h>
 #include "util.h"
-#include "metrics.h"
 
 // This is the number of discs in the puzzle.
 
-#define NUM_DISCS  7
-#define NUMBER_OF_RUNS 40 /* Default number of runs */
+#define NUM_DISCS  10
 
 //--------------------------------------------------------------------------
 // List data structure and functions
@@ -143,34 +138,6 @@ void towers_clear( struct Towers* this )
 
 }
 
-#if HOST_DEBUG
-void towers_print( struct Towers* this )
-{
-  struct Node* ptr;
-  int i, numElements;
-
-  printf( "  pegA: " );
-  for ( i = 0; i < ((this->numDiscs)-list_getSize(&(this->pegA))); i++ )
-    printf( ". " );
-  for ( ptr = this->pegA.head; ptr != 0; ptr = ptr->next )
-    printf( "%d ", ptr->val );
-
-  printf( "  pegB: " );
-  for ( i = 0; i < ((this->numDiscs)-list_getSize(&(this->pegB))); i++ )
-    printf( ". " );
-  for ( ptr = this->pegB.head; ptr != 0; ptr = ptr->next )
-    printf( "%d ", ptr->val );
-
-  printf( "  pegC: " );
-  for ( i = 0; i < ((this->numDiscs)-list_getSize(&(this->pegC))); i++ )
-    printf( ". " );
-  for ( ptr = this->pegC.head; ptr != 0; ptr = ptr->next )
-    printf( "%d ", ptr->val );
-
-  printf( "\n" );
-}
-#endif
-
 void towers_solve_h( struct Towers* this, int n,
                      struct List* startPeg,
                      struct List* tempPeg,
@@ -179,9 +146,6 @@ void towers_solve_h( struct Towers* this, int n,
   int val;
 
   if ( n == 1 ) {
-#if HOST_DEBUG
-    towers_print(this);
-#endif
     val = list_pop(startPeg);
     list_push(destPeg,val);
     this->numMoves++;
@@ -205,43 +169,25 @@ int towers_verify( struct Towers* this )
   int numDiscs = 0;
 
   if ( list_getSize(&this->pegA) != 0 ) {
-#if HOST_DEBUG
-    printf( "ERROR: Peg A is not empty!\n" );
-#endif
     return 2;
   }
 
   if ( list_getSize(&this->pegB) != 0 ) {
-#if HOST_DEBUG
-    printf( "ERROR: Peg B is not empty!\n" );
-#endif
     return 3;
   }
 
   if ( list_getSize(&this->pegC) != this->numDiscs ) {
-#if HOST_DEBUG
-    printf( " ERROR: Expected %d discs but found only %d discs!\n", \
-            this->numDiscs, list_getSize(&this->pegC) );
-#endif
     return 4;
   }
 
   for ( ptr = this->pegC.head; ptr != 0; ptr = ptr->next ) {
     numDiscs++;
     if ( ptr->val != numDiscs ) {
-#if HOST_DEBUG
-      printf( " ERROR: Expecting disc %d on peg C but found disc %d instead!\n", \
-              numDiscs, ptr->val );
-#endif
       return 5;
     }
   }
 
   if ( this->numMoves != ((1 << this->numDiscs) - 1) ) {
-#if HOST_DEBUG
-    printf( " ERROR: Expecting %d num moves but found %d instead!\n", \
-            ((1 << this->numDiscs) - 1), this->numMoves );
-#endif
     return 6;
   }
 
@@ -250,50 +196,38 @@ int towers_verify( struct Towers* this )
 
 //--------------------------------------------------------------------------
 // Main
-//--------------------------------------------------------------------------
 
-int main( int argc, char* argv[] ) {
-    int Run_Index;
-    int Number_Of_Runs = NUMBER_OF_RUNS;
-    struct Towers towers;
+int main (int argc, char** argv){
+  uint32_t cid = argv[0][0];
+  uint32_t nc  = argv[0][1];
+  struct Towers towers;
+  int i;
 
-    // Initialize free list
+  // Initialize free list
 
-    list_init( &g_nodeFreeList );
-    g_nodeFreeList.head = &(g_nodePool[0]);
-    g_nodeFreeList.size = NUM_DISCS;
-    g_nodePool[NUM_DISCS-1].next = 0;
-    g_nodePool[NUM_DISCS-1].val = 99;
-    for (int i = 0; i < (NUM_DISCS-1); i++ ) {
-        g_nodePool[i].next = &(g_nodePool[i+1]);
-        g_nodePool[i].val = i;
-    }
+  list_init( &g_nodeFreeList );
+  g_nodeFreeList.head = &(g_nodePool[0]);
+  g_nodeFreeList.size = NUM_DISCS;
+  g_nodePool[NUM_DISCS-1].next = 0;
+  g_nodePool[NUM_DISCS-1].val = 99;
+  for ( i = 0; i < (NUM_DISCS-1); i++ ) {
+    g_nodePool[i].next = &(g_nodePool[i+1]);
+    g_nodePool[i].val = i;
+  }
 
-    towers_init( &towers, NUM_DISCS );
+  towers_init( &towers, NUM_DISCS );
 
+  // If needed we preallocate everything in the caches
 
 #if PREALLOCATE
-    towers_solve( &towers );
+  stats(towers_solve( &towers ),NUM_DISCS);
 #endif
 
-    roi_start(); 
-    //---------------------------------------------------------
-    // ROI
-    for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index){
-        towers_clear( &towers );
-        towers_solve( &towers );
-    }
-    //---------------------------------------------------------
-    roi_end(); 
-    print_metrics("towers");
+  // Solve it
+  towers_clear( &towers );
+  stats(towers_solve( &towers ),NUM_DISCS);
 
-
-#if HOST_DEBUG
-    towers_print( &towers );
-#endif
-
-    // Check the results
-    exit (towers_verify( &towers ));
-
+  // Check the results
+  return towers_verify( &towers );
 }
 
