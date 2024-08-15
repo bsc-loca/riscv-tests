@@ -92,10 +92,12 @@ void setStats(int enable)
 void __attribute__((noreturn, noinline)) tohost_exit(uintptr_t code)
 {
   if (code) {
-    // printf("exit with code %lld\n", code);
+    printf("Test Fail! \r\n\n");
+    asm volatile("fence");
     fail();
   } else {
-    // printf("exit with code %lld\n", code);
+    printf("Test Pass! \r\n\n");
+    asm volatile("fence");
     pass();
   }
 }

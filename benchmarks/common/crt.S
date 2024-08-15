@@ -37,8 +37,8 @@
 # define REGBYTES 4
 #endif
 
-#ifndef PITON_NUMTILES
-  #define PITON_NUMTILES 1
+#ifndef NUMTILES
+  #define NUMTILES 1
 #endif
 
   .section ".text.init"
@@ -151,7 +151,7 @@ _start:
   # get core id
   csrr a0, mhartid
   # for now, assume only 1 core
-  li a1, PITON_NUMTILES
+  li a1, NUMTILES
 1:bgeu a0, a1, 1b
 
   # give each core 128KB of stack + TLS

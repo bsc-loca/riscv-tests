@@ -39,6 +39,7 @@
 extern void setStats(int enable);
 
 #include <stdint.h>
+#include <stddef.h>
 
 // instantiation macros for atomic memory operation (non LR/SC)
 // see also
@@ -105,11 +106,10 @@ static int verify_int(int n, const volatile int* test, const int* verify)
   return 0;
 }
 
-static int verifyDouble(int n, const volatile double* test, const double* verify)
+static int verifyDouble(size_t n, const volatile double* test, const double* verify)
 {
-  int i;
   // Unrolled for faster verification
-  for (i = 0; i < n/2*2; i+=2)
+  for (size_t i = 0; i < n/2*2; i+=2)
   {
     double t0 = test[i], t1 = test[i+1];
     double v0 = verify[i], v1 = verify[i+1];
@@ -179,8 +179,8 @@ static uintptr_t insn_len(uintptr_t pc)
     code; \
     _c += read_csr(mcycle), _i += read_csr(minstret); \
     if (cid == 0) \
-      printf("\n%s: \nCycles: %ld \nInstructions: %ld \n %ld.%ld cycles/iter, %ld.%ld CPI\n\n", \
-             stringify(code), _c, _i, _c/iter, 10*_c/iter%10, _c/_i, 10*_c/_i%10); \
+      printf("\r\n%s: \r\nCycles: %ld \r\nInstructions: %ld \r\nIPC: %ld.%ld \r\n\n", \
+             stringify(code), _c, _i, _i/_c, 10*_i/_c%10); \
   } while(0)
 
 #endif //__UTIL_H
