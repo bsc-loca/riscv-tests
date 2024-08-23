@@ -172,13 +172,26 @@ static uintptr_t insn_len(uintptr_t pc)
 
 #define stringify_1(s) #s
 #define stringify(s) stringify_1(s)
+#ifdef FPGA 
 #define stats(code, iter) do { \
     unsigned long _c = -read_csr(mcycle), _i = -read_csr(minstret); \
     code; \
     _c += read_csr(mcycle), _i += read_csr(minstret); \
-    if (cid == 0) \
-      printf("\r\n%s: \r\nCycles: %ld \r\nInstructions: %ld \r\nIPC: %ld.%ld \r\n\n", \
-             stringify(code), _c, _i, _i/_c, 10*_i/_c%10); \
-  } while(0)
+    if (cid == 0) { \
+        printf("\r\n%s: \r\nCycles: %ld \r\nInstructions: %ld \r\nIPC: %ld.%ld \r\n\n", \
+            stringify(code), _c, _i, _i/_c, 10*_i/_c%10); \
+    } \
+}while(0)
+#else
+#define stats(code, iter) do { \
+    unsigned long _c = -read_csr(mcycle), _i = -read_csr(minstret); \
+    code; \
+    _c += read_csr(mcycle), _i += read_csr(minstret); \
+    if (cid == 0) { \
+        printf("\n%s: \nCycles: %ld \nInstructions: %ld \nIPC: %ld.%ld \n\n", \
+            stringify(code), _c, _i, _i/_c, 10*_i/_c%10); \
+    } \
+}while(0)
+#endif
 
 #endif //__UTIL_H

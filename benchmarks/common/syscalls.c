@@ -92,11 +92,19 @@ void setStats(int enable)
 void __attribute__((noreturn, noinline)) tohost_exit(uintptr_t code)
 {
   if (code) {
-    printf("Test Fail! \r\n\n");
+#ifdef FPGA 
+    printf("Test Fail! Code: %d \r\n\n",code);
+#else
+    printf("Test Fail! Code: %d \n\n",code);
+#endif
     asm volatile("fence");
     fail();
   } else {
+#ifdef FPGA 
     printf("Test Pass! \r\n\n");
+#else
+    printf("Test Pass! \n\n");
+#endif
     asm volatile("fence");
     pass();
   }
