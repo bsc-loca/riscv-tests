@@ -39,12 +39,17 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 
     make -j$(nproc) GCC_OPT=-DNUMTILES=4 fpga
 
-### Build Benchmarks with the Cache Warm-up enabled (single-thread - multi-thread - FPGA)
 
-    make -j$(nproc) GCC_OPT=-DPREALLOCATE
-    make -j$(nproc) GCC_OPT="-DPREALLOCATE -DNUMTILES=4"
-    make -j$(nproc) GCC_OPT=-DPREALLOCATE fpga
-    make -j$(nproc) GCC_OPT="-DPREALLOCATE -DNUMTILES=4" fpga
+### Available Macros
+
+| Macro | Description |
+|-------|-------------|
+| PREALLOCATE | Enable the cache warm-up |
+| NUMTILES | Number of cores in the system |
+| HPM\_ENABLE | Enable the performance monitors|
+    
+
+    make -j$(nproc) GCC_OPT="-DPREALLOCATE -DNUMTILES=4 -DHPM_ENABLE"
 
 
 
@@ -69,6 +74,7 @@ Available Benchmarks
 | 12  |int-spmv        | long     | 135 KB       |
 | 13  |int-vvadd       | int      | 24 KB        |
 
+
 ### Floating-point operations (single-thread)
 
 | No | Benchmark      |Data Type | Problem Size | 
@@ -80,6 +86,7 @@ Available Benchmarks
 | 5  |fp-multiply     | float    | 24 KB        |
 | 6  |fd-spmv         | double   | 135 KB       |
 | 7  |fd-vvadd        | float    | 24 KB        |
+
 
 ### Multi-thread Benchmarks 
 
@@ -118,8 +125,14 @@ Available Benchmarks
 | lhr07      | 7337   | 7337   | 156508  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Mallya/lhr07.html) | 2.5 MB |
 
   
+HPM Counters
+=============================
    
-   
+There are 29 hardware counters available per core. The [`hpm_config`](https://gitlab.bsc.es/hwdesign/rtl/uncore/riscv-tests/-/blob/ft/hpm_control/benchmarks/common/hpm_config.h#L39) is the configuration vector, where the counters are linked to the available events in the system according to the counter number and event ID. This vector can be modified according to the available events per core. The available events and their IDs are described in the same file.
+
+
+
+<br><br><br>
 
 
 

@@ -170,6 +170,9 @@ static uintptr_t insn_len(uintptr_t pc)
 #include "encoding.h"
 #endif
 
+#include "hpm.h"
+#include "hpm_config.h"
+
 #define stringify_1(s) #s
 #define stringify(s) stringify_1(s)
 #ifdef FPGA 
@@ -184,13 +187,17 @@ static uintptr_t insn_len(uintptr_t pc)
 }while(0)
 #else
 #define stats(code, iter) do { \
+    __hpm_config__(hpm_config);\
+    __hpm_start_read__();\
     unsigned long _c = -read_csr(mcycle), _i = -read_csr(minstret); \
     code; \
     _c += read_csr(mcycle), _i += read_csr(minstret); \
+    __hpm_end_eval__();\
     if (cid == 0) { \
         printf("\n%s: \nCycles: %ld \nInstructions: %ld \nIPC: %ld.%ld \n\n", \
             stringify(code), _c, _i, _i/_c, 10*_i/_c%10); \
     } \
+    __hpm_print__(nc,cid);\
 }while(0)
 #endif
 
