@@ -45,7 +45,9 @@ extern volatile uint64_t fromhost;
 static uintptr_t counters[NUM_COUNTERS];
 static char* counter_names[NUM_COUNTERS];
 
-
+#ifndef NUMTILES
+  #define NUMTILES 1
+#endif
 
 // prints a cstring via the fake UART
 void printbuf(const char * buf, int buflen) {
@@ -91,15 +93,29 @@ void setStats(int enable)
 
 void __attribute__((noreturn, noinline)) tohost_exit(uintptr_t code)
 {
-  if (code) {
-#ifdef FPGA 
-    printf("Test Fail! Code: %d \r\n\n",code);
+    volatile static uint32_t core_sync = 0;
+    volatile static uint32_t end_sync = 0;
+    volatile static uint32_t errors = 0;
+    uint32_t coreid = read_csr(mhartid);
+    
+    while(coreid != core_sync);    
+    if(code != 0) {
+        ATOMIC_OP(errors, 1, add, w);
+        printf("Core %d: %d Verification Fail \n",coreid,code);
+    }
+    ATOMIC_OP(core_sync, 1, add, w);
+    barrier(NUMTILES);
+
+    while(coreid != end_sync);    
+    if (errors) {
+#ifdef FPGA   
+        printf("Test Fail! \r\n\n",errors);
 #else
-    printf("Test Fail! Code: %d \n\n",code);
+        printf("Test Fail! \n\n",errors);
 #endif
-    asm volatile("fence");
-    fail();
-  } else {
+        asm volatile("fence");
+        fail();
+    } else {
 #ifdef FPGA 
     printf("Test Pass! \r\n\n");
 #else
@@ -107,7 +123,8 @@ void __attribute__((noreturn, noinline)) tohost_exit(uintptr_t code)
 #endif
     asm volatile("fence");
     pass();
-  }
+    }
+    ATOMIC_OP(end_sync, 1, add, w);
 }
 
 uintptr_t __attribute__((weak)) handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
@@ -164,45 +181,16 @@ void _init(int cid, int nc)
   int ret = main(2, argv);
 
   ATOMIC_OP(finish_sync0, 1, add, w);
-  //__asm__ __volatile__ (  " amoadd.w zero, %1, %0" : "+A" (finish_sync0) : "r" (1) : "memory");
+ 
   while(finish_sync0 != nc);
-
+  
   // synchronize for debug output below
   while(finish_sync1 != cid);
-
-  char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
-  char* pbuf = buf;
-  for (int i = 0; i < NUM_COUNTERS; i++)
-    if (counters[i])
-      pbuf += sprintf(pbuf, "core %d: %s = %d\n", cid, counter_names[i], counters[i]);
-  if (pbuf != buf)
-    printstr(buf);
-
+  
   ATOMIC_OP(finish_sync1, 1, add, w);
-  //__asm__ __volatile__ (  " amoadd.w zero, %1, %0" : "+A" (finish_sync1) : "r" (1) : "memory");
 
   exit(ret);
  
-  // // only single-threaded programs should ever get here.
-  // if(nc!=1) {
-  //   return;
-  // }
-
-  // init_tls();
-
-  // char num[2]   = {cid, nc};
-  // char *argv[1] = {num};
-  // int ret = main(2, argv);
-
-  // char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
-  // char* pbuf = buf;
-  // for (int i = 0; i < NUM_COUNTERS; i++)
-  //   if (counters[i])
-  //     pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
-  // if (pbuf != buf)
-  //   printstr(buf);
-
-  // exit(ret);
 }
 
 #undef putchar
