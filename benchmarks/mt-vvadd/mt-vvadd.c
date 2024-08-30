@@ -12,78 +12,33 @@
 // generated using the vvadd_gendata.pl perl script and dumped
 // to a file named dataset.h 
 
-//--------------------------------------------------------------------------
-// Includes 
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-
-//--------------------------------------------------------------------------
-// Input/Reference Data
-
-#include "dataset.h"
- 
-  
-//--------------------------------------------------------------------------
-// Basic Utilities and Multi-thread Support
-
 #include "util.h"
+#include "double_cmp.h"
    
- 
-//--------------------------------------------------------------------------
-// vvadd function
+#include "dataset.h"
 
-extern void __attribute__((noinline)) vvadd(int coreid, int ncores, size_t n, const data_t* x, const data_t* y, data_t* z);
+extern void __attribute__((noinline)) vvadd(int coreid, int ncores, size_t lda, const data_t* x, const data_t* y, data_t* z);
 
+/*
+ *
+ */
 
-//--------------------------------------------------------------------------
-// Main
-//
-// all threads start executing thread_entry(). Use their "coreid" to
-// differentiate between threads (each thread is running on a separate core).
-int main(int argc, char** argv)
-{
-   int cid;
-   int nc;
+int main (int argc, char** argv){
+    uint32_t cid = argv[0][0];
+    uint32_t nc  = argv[0][1];
+   
+    if(cid==0) printf("\nWe are %d cores.\n",nc);
+    barrier(nc);
 
-   // synchronization variable
-   volatile static uint32_t amo_cnt = 0;
-
-   // static allocates data in the binary, which is visible to both threads
-   static data_t results_data[DATA_SIZE];
- 
-   cid = argv[0][0];
-   nc = argv[0][1];
-
-   // First do out-of-place vvadd
-   barrier(nc);
+#if PREALLOCATE
+   stats(vvadd(cid, nc, DATA_SIZE, input1_data, input2_data, results_data); barrier(nc), DATA_SIZE);
+#endif
    stats(vvadd(cid, nc, DATA_SIZE, input1_data, input2_data, results_data); barrier(nc), DATA_SIZE);
  
-   if(cid == 0) {
-     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
-     if(res) exit(res);
-   }
+   int res = mt_verify(cid, nc, DATA_SIZE, results_data, verify_data);
 
-   // Second do in-place vvadd
-   // Copying input
-   /*
-   size_t i;
-   if(cid == 0) {
-     for (i = 0; i < DATA_SIZE; i++)
-           results_data[i] = input1_data[i];
-   }
-   barrier(nc);
-   stats(vvadd(cid, nc, DATA_SIZE, results_data, input2_data, results_data); barrier(nc), DATA_SIZE);
- 
-   if(cid == 0) {
-     int res = verifyDouble(DATA_SIZE, results_data, verify_data);
-     if(res) exit(res);
-   }
-   
-   barrier(nc);
-   */
-
-   return 0;
+   exit(res);
 }

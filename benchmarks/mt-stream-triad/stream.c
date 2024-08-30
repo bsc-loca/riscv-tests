@@ -51,7 +51,7 @@ void tuned_STREAM_Add(const size_t coreid, const size_t ncores,const size_t lda 
 	    C[j] = A[j]+B[j];
 }
 
-void tuned_STREAM_Triad(const size_t coreid, const size_t ncores,const size_t lda ,data_t A[], data_t C[], data_t B[], data_t alpha)
+void tuned_STREAM_Triad(const size_t coreid, const size_t ncores,const size_t lda ,data_t *A, data_t *C, data_t *B, data_t alpha)
 {
     size_t i, k, block, start, end;
        

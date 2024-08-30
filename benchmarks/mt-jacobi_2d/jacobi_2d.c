@@ -16,7 +16,7 @@
 
 #include "dataset.h"
 
-static void jacobi_2d(int ncores, int coreid, int lda, data_t A[], data_t B[])
+static void jacobi_2d(int ncores, int coreid, int lda, data_t *A, data_t *B)
 {
     int t, i, j, k;
     size_t  block, start, end;
@@ -39,7 +39,7 @@ static void jacobi_2d(int ncores, int coreid, int lda, data_t A[], data_t B[])
 
 /* Main computational kernel. The whole function will be timed,
    including the call and return. */
-void kernel_jacobi_2d(int ncores, int coreid, int lda, data_t A[], data_t B[])
+void kernel_jacobi_2d(int ncores, int coreid, int lda, data_t *A, data_t *B)
 {
     jacobi_2d(ncores, coreid, lda, B, A);
     barrier(ncores);

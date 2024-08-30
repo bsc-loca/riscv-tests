@@ -74,7 +74,7 @@ sub printArray
   my $arrayLen = scalar(@{$arrayRef});
 
 
-  print "static data_t ".$arrayName."[".$size."] __attribute__((aligned (1024))) = \n";
+  print "static data_t ".$arrayName."[".$size."] = \n";
   print "{\n";
 
   for my $a (range(3)){
@@ -109,7 +109,7 @@ sub printArray_4D
   my $arrayLen = scalar(@{$arrayRef});
 
 
-  print "static ".$type." ".$arrayName."[3][N][N][N] ". "__attribute__((aligned (1024))) = \n";
+  print "static ".$type." ".$arrayName."[3][N][N][N] = \n";
   print "\{\n";
 
   for my $a (range(3)){
@@ -315,10 +315,6 @@ sub main()
         $X->[0][$i][$j][$k] = int(incr_rand());
         $X->[1][$i][$j][$k] = int(incr_rand());
         $X->[2][$i][$j][$k] = int(incr_rand());
-        
-	 #   $Xcenter->[0] += $X->[0][$i][$j][$k];
-     #   $Xcenter->[1] += $X->[1][$i][$j][$k];
-     #   $Xcenter->[2] += $X->[2][$i][$j][$k];
 
         $V->[0][$i][$j][$k] = int(rand($N));
         $V->[1][$i][$j][$k] = int(rand($N));
@@ -335,35 +331,31 @@ sub main()
       }
     }
   }
- # $Xcenter->[0] /= ($N*$N*$N);
- # $Xcenter->[1] /= ($N*$N*$N);
- # $Xcenter->[2] /= ($N*$N*$N);
 
-  print "\n#ifndef __DATASET_H";
-  print "\n#define __DATASET_H";
-  print "\n\#define N ".$opts{"size"}." \n\n";
+  print "#ifndef __DATASET_H \n";
+  print "#define __DATASET_H \n\n";
+  
+  print "#define N ".$opts{"size"}." \n\n";
 
 
-  print "\n\#define DATA_TYPE\n"; 
-  print "typedef $opts{Dtype} data_t;\n";  
+  print "#define DATA_TYPE \n"; 
+  print "typedef $opts{Dtype} data_t;\n\n";  
 
   
    print "
-#ifndef PITON_NUMTILES
-	#define PITON_NUMTILES 1
+#ifndef NUMTILES
+	#define NUMTILES 1
 #endif
 
-static data_t Xcenter_sub0 [PITON_NUMTILES];
-static data_t Xcenter_sub1 [PITON_NUMTILES];
-static data_t Xcenter_sub2 [PITON_NUMTILES];
+static data_t Xcenter_sub0 [NUMTILES];
+static data_t Xcenter_sub1 [NUMTILES];
+static data_t Xcenter_sub2 [NUMTILES];
 
 static data_t dt=$dt;
 static data_t spring_K=$spring_K;
 static data_t M=$M;
 
 ";
-  
-   
  
   printArray_4D( "X", $X, "data_t", "N*N*N*3", $N);
   printArray_4D( "V", $V, "data_t", "N*N*N*3", $N);
@@ -376,7 +368,7 @@ static data_t M=$M;
   print "static data_t Xcenter_ref[3] = {".$Xcenter->[0].", ".$Xcenter->[1].", ".$Xcenter->[2]."};\n\n";
    
   
-  print "\n#endif //__DATASET_H\n";
+  print "#endif //__DATASET_H\n";
  
 }
 

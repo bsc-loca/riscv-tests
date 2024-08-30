@@ -32,8 +32,8 @@ sub usage()
   print " Options:\n";
   print "  --help  print this message\n";
   print "  --size  size of input data [1000]\n";
-  print "  --seed  random seed [1]\n";
-  print "  --Dtype Data type [int] char\n";
+  print "  --seed  random seed [1] \n";
+  print "  --Dtype Data type [uint32_t] \n";
   print "  --dev   [16] input data are randomly selected between 0 & size/dev value\n";
   print "$usageMsg";
 
@@ -46,12 +46,12 @@ sub processCommandLine()
   $opts{"help"} = 0;
   $opts{"size"} = 1024;
   $opts{"seed"} = 1;
-  $opts{"Dtype"} = "int";
+  $opts{"Dtype"} = "uint32_t";
   $opts{"dev"} = 16;
   Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i', 'Dtype:s' , 'dev:i') or usage();
   $opts{"help"} and usage();
   
-  my @types=('char','int');
+  my @types=('uint32_t');
   unless ( grep( /^$opts{Dtype}$/, @types ) ) {
      print "Error: $opts{Dtype} is an unsupported data type. Valid values are @types\n";
      exit ();
@@ -154,23 +154,23 @@ sub main()
   my @Z = sort { $a <=> $b } @X;
  
 
-  print  "\n#ifndef __DATASET_H";
-  print  "\n#define __DATASET_H";
-  print  "\n\#define TOTAL_KEYS ".($opts{"size"})." \n";
-  print  "\n\#define MAX_KEY ".($max)." \n";
-  print  "\n\#define DATA_TYPE\n";  
-  print  "\ntypedef $opts{Dtype} data_t;\n";
+  print  "#ifndef __DATASET_H \n";
+  print  "#define __DATASET_H \n\n";
+  print  "#define TOTAL_KEYS ".($opts{"size"})." \n";
+  print  "#define MAX_KEY ".($max)." \n\n";
+  print  "#define DATA_TYPE\n";  
+  print  "typedef $opts{Dtype} data_t;\n\n";
 
   my $T = $opts{"size"};
-  print "static data_t key_buff [$T]=\{0\};\n"; 
   
   printArray( "key_array", \@X, $T,"data_t"); 
   printArray( "key_verify", \@Z, $T,"data_t"); 
-  printArray( "key_histogram", \@Y, $max,"unsigned int"); 
+  printArray( "key_histogram", \@Y, $max,"data_t"); 
    
+  print "static data_t key_buff [$T]=\{0\};\n"; 
   
 
-  print  "\n#endif //__DATASET_H";
+  print  "#endif //__DATASET_H \n";
  
 }
 

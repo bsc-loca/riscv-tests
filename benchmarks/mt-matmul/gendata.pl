@@ -164,8 +164,8 @@ sub main()
   my $mat_values2;
   for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
     for ( my $j = 0; $j < $opts{"size"}; $j++ ) {
-      $mat_values1->[$i][$j] = int(rand(4));
-      $mat_values2->[$i][$j] = int(rand(4));
+      $mat_values1->[$i][$j] = int(rand((1<<15)-1));
+      $mat_values2->[$i][$j] = int(rand((1<<15)-1));
     }
   }
 
@@ -187,11 +187,14 @@ sub main()
     }
   }
 
-  print "\n#ifndef __DATASET_H";
-  print "\n#define __DATASET_H";
-  print "\n\#define ARRAY_SIZE ".($opts{"size"}*$opts{"size"})." \n\n";
-  print "\n\#define DIM_SIZE ".$opts{"size"}." \n\n";
-  print "\ntypedef double data_t; \n";
+  print "#ifndef __DATASET_H\n";
+  print "#define __DATASET_H\n\n";
+
+  print "#define ARRAY_SIZE ".($opts{"size"}*$opts{"size"})." \n";
+  print "#define DIM_SIZE ".$opts{"size"}." \n\n";
+  
+  print "#define DATA_TYPE\n";  
+  print "typedef double data_t; \n\n";
    
   printArray( "input1_data", \@values1 );
   printArray( "input2_data", \@values2 );
@@ -199,7 +202,7 @@ sub main()
 
   print "static data_t results_data[ARRAY_SIZE] = {0}; \n\n";
   
-  print "\n#endif //__DATASET_H";
+  print "#endif //__DATASET_H \n";
  
 }
 

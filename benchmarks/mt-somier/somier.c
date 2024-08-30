@@ -6,9 +6,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-//#include <assert.h>
 #include "dataset.h"
-
 #include "somier.h"
 
 
@@ -28,11 +26,11 @@ int * __errno (void ){
 
 
 
-static size_t start   [PITON_NUMTILES];
-static size_t end     [PITON_NUMTILES];
-static size_t start_i [PITON_NUMTILES];
-static size_t start_j [PITON_NUMTILES];
-static size_t start_k [PITON_NUMTILES];    
+static size_t start   [NUMTILES];
+static size_t end     [NUMTILES];
+static size_t start_i [NUMTILES];
+static size_t start_j [NUMTILES];
+static size_t start_k [NUMTILES];    
 
 
 void init_forloop_boundries (int cid,int nc, int dim ){

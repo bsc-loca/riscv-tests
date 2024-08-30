@@ -7,6 +7,15 @@ RISC-V ISA tests and Benchmarks compatibles with OpenPiton.
 
     export RISCV=/path/to/installation/directory
     export PATH=$RISCV/bin:$PATH
+    export LD_LIBRARY_PATH=$RISCV/lib:$LD_LIBRARY_PATH
+    export C_INCLUDE_PATH=$RISCV/include:$C_INCLUDE_PATH
+    export CPLUS_INCLUDE_PATH=$RISCV/include:$CPLUS_INCLUDE_PATH
+
+### Build RISC-V C and C++ cross-compiler
+    
+    git clone https://github.com/riscv/riscv-gnu-toolchain
+    ./configure --prefix=$RISCV --with-arch=rv64imafd --with-cmodel=medany
+    make -j$(nproc) 
 
 ### Build ISA tests
 

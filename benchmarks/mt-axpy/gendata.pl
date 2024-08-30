@@ -158,8 +158,8 @@ sub main()
   my $x;
   my $y;
   for ( my $i = 0; $i < $opts{"size"}; $i++ ) {   
-      $x->[$i] = int(rand($in_max));
-      $y->[$i] = int(rand($in_max));  
+      $x->[$i] = int(rand((1<<16)-1));
+      $y->[$i] = int(rand((1<<16)-1));  
       push( @X, $x->[$i] );
       push( @Y, $y->[$i] );  
   }
@@ -174,12 +174,12 @@ sub main()
 
   
 
-  print  "#ifndef __DATASET_H";
-  print  "\n#define __DATASET_H";
-  print  "\n\#define ARRAY_SIZE ".($opts{"size"})." \n";
-  print  "\n\#define Alfa  $Alfa\n\n";
-  print  "\n\#define DATA_TYPE\n";  
-  print  "\ntypedef $opts{Dtype} data_t;\n";
+  print  "#ifndef __DATASET_H \n";
+  print  "#define __DATASET_H \n\n";
+  print  "#define ARRAY_SIZE ".($opts{"size"})." \n";
+  print  "#define Alfa  $Alfa\n\n";
+  print  "#define DATA_TYPE\n";  
+  print  "typedef $opts{Dtype} data_t;\n\n";
 
 
   printArray( "input1_data", \@X );

@@ -33,6 +33,7 @@ sub usage()
   print "  --help  print this message\n";
   print "  --size  size of input data [1000]\n";
   print "  --seed  random seed [1]\n";
+  print "  --Dtype Data type [double] , float, int, long\n";
   print "$usageMsg";
 
   exit();
@@ -44,8 +45,14 @@ sub processCommandLine()
   $opts{"help"} = 0;
   $opts{"size"} = 1000;
   $opts{"seed"} = 1;
-  Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i' ) or usage();
+  $opts{"Dtype"} = "double";
+  Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i', 'Dtype:s' ) or usage();
   $opts{"help"} and usage();
+  my @types=('double','int','float', 'long');
+  unless ( grep( /^$opts{Dtype}$/, @types ) ) {
+     print "Error: $opts{Dtype} is an unsupported data type. Valid values are @types\n";
+     exit ();
+  } 
 
 }
 
@@ -67,7 +74,7 @@ sub printArray
   if ( $arrayLen <= $numCols ) {
     print "  ";
     for ( my $i = 0; $i < $arrayLen; $i++ ) {
-      print sprintf("%d",$arrayRef->[$i]);
+      print sprintf("%3d",$arrayRef->[$i]);
       if ( $i != $arrayLen-1 ) {
         print ", ";
       }
@@ -81,7 +88,7 @@ sub printArray
       print "  ";
       for ( my $i = 0; $i < $numCols; $i++ ) {
         my $index = $j*$numCols + $i;
-        print sprintf("%d",$arrayRef->[$index]);
+        print sprintf("%3d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print ", ";
         }
@@ -93,7 +100,7 @@ sub printArray
       print "  ";
       for ( my $i = 0; $i < ($arrayLen-($numRows*$numCols)); $i++ ) {
         my $index = $numCols*$numRows + $i;
-        print sprintf("%d",$arrayRef->[$index]);
+        print sprintf("%3d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print ", ";
         }
@@ -120,24 +127,28 @@ sub main()
   my @values2;
   my @sum;
   for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
-    my $value1 = int(rand(19));
-    my $value2 = int(rand(19));
+    my $value1 = int(rand((1<<15)-1));
+    my $value2 = int(rand((1<<15)-1));
     push( @values1, $value1 );
     push( @values2, $value2 );
     push( @sum, $value1 + $value2 );
   }
 
+    
+  print "#ifndef __DATASET_H \n";
+  print "#define __DATASET_H \n\n";
+  print "#define DATA_SIZE ".$opts{"size"}." \n\n";
 
-  print "\n#ifndef __DATASET_H";
-  print "\n#define __DATASET_H";
-
-  print "\n\n\#define DATA_SIZE ".$opts{"size"}." \n\n";
-    print "\ntypedef int data_t;\n\n";
+  print "#define DATA_TYPE\n";  
+  print "typedef $opts{Dtype} data_t;\n\n";
+  
   printArray( "input1_data", \@values1 );
   printArray( "input2_data", \@values2 );
   printArray( "verify_data", \@sum );
 
-  print "\n#endif //__DATASET_H\n";
+  print "static data_t results_data[DATA_SIZE] = {0}; \n\n";
+
+  print "#endif //__DATASET_H \n";
 
 }
 
