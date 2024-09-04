@@ -1,14 +1,12 @@
+#ifndef __DATASET_H 
+#define __DATASET_H 
 
-#ifndef __DATASET_H
-#define __DATASET_H
 #define TOTAL_KEYS 8192 
-
 #define MAX_KEY 512 
 
 #define DATA_TYPE
+typedef uint32_t data_t;
 
-typedef int data_t;
-static data_t key_buff [8192]={0};
 static data_t key_array[8192] = 
 {
   21, 232, 427, 172, 289, 0, 96, 507, 384, 187, 179, 293, 67, 32, 486, 78, 299, 110, 412, 71, 
@@ -837,7 +835,7 @@ static data_t key_verify[8192] =
   511, 511, 511, 511, 511, 511, 511, 511, 511, 511, 511, 511
 };
 
-static unsigned int key_histogram[512] = 
+static data_t key_histogram[512] = 
 {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -867,5 +865,5 @@ static unsigned int key_histogram[512] =
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-
-#endif //__DATASET_H
+static data_t key_buff [8192]={0};
+#endif //__DATASET_H 

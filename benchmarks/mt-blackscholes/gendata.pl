@@ -70,7 +70,7 @@ sub printArray
   my $numCols = 20;
   my $arrayLen = scalar(@{$arrayRef});
 
-  print "static ".$data_t." ".$arrayName."[ARRAY_SIZE] __attribute__((aligned (1024))) = \n";
+  print "static ".$data_t." ".$arrayName."[ARRAY_SIZE] = \n";
   print "{\n";
 
   if ( $arrayLen <= $numCols ) {
@@ -180,7 +180,6 @@ sub main()
         push( @otime     , $t  [$i % $max] );
         push( @otype     , $pc [$i % $max] );
         push( @DGrefval  , $dg [$i % $max] );
-        push( @result    , 0               );
     }
     my $dat_size = (($opts{"size"}*4)*8)/1024;
     
@@ -200,7 +199,8 @@ sub main()
     printArray( "volatility", \@volatility, "2"  );
     printArray( "otime"     , \@otime     , "2"  );
     printArray( "DGrefval"  , \@DGrefval  , "18" );
-    printArray( "priceDelta", \@result    , "0"  );
+    
+    print "static data_t priceDelta[ARRAY_SIZE] = {0}; \n";
 
     print "\n#endif //__DATASET_H\n";
 

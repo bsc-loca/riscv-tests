@@ -8,34 +8,23 @@
 // multiplication and vector addition. The input data (and reference data) should be generated
 // using the gendata.pl perl script 
 
-//--------------------------------------------------------------------------
-// Includes 
-#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
 
-//--------------------------------------------------------------------------
-// Input/Reference Data
 #include "dataset.h"
 
-//--------------------------------------------------------------------------
-// Basic Utilities and Multi-thread Support
 #include "util.h"
 #include "double_cmp.h"
    
-//--------------------------------------------------------------------------
-// Stream Copy function
 extern void __attribute__((noinline)) tuned_STREAM_Copy(const size_t coreid, const size_t ncores,const size_t lda , data_t A[], data_t C[] );
+extern int mt_verify(const size_t coreid, const size_t ncores,const size_t lda , data_t* test,   data_t* verify );
 
-//--------------------------------------------------------------------------
-// Verification function
-extern int   mt_verify(const size_t coreid, const size_t ncores,const size_t lda , data_t* test,   data_t* verify );
+/*
+ *
+ */
 
-//--------------------------------------------------------------------------
-// Main
 int main(int argc, char** argv) {
-   
     uint32_t cid = argv[0][0];
     uint32_t nc  = argv[0][1];
 
@@ -43,15 +32,8 @@ int main(int argc, char** argv) {
     barrier(nc);
    
     stats(tuned_STREAM_Copy(cid,nc,ARRAY_SIZE,input2_data,input1_data); barrier(nc), ARRAY_SIZE);
-    barrier(nc);
    
     int res = mt_verify(cid,nc,ARRAY_SIZE,input1_data,verify_data);
-    barrier(nc);        
-    
-    if(res){
-        printf("Core %d: Verification failed!\n",cid);
-        exit(res);  
-    }
       
-   exit(0);     
+    exit(res);     
 }

@@ -1,7 +1,7 @@
-
-#include "dataset.h"
+#include <stdint.h>
 #include <stddef.h>
 #include "util.h"
+#include "dataset.h"
 
 static unsigned int offset [1024] ={0};
 
@@ -97,7 +97,7 @@ int sort_verify (const size_t coreid, const size_t ncores,const size_t lda , dat
 
 
 
-void int_sort (int cid, int nc, int siz, data_t key_array[] ) {
+void int_sort (int cid, int nc, int siz, data_t *key_array) {
 	histogram ( cid, nc, siz, key_array, key_buff, key_histogram );	
     barrier(nc);        
 	cumulative_sum_1( cid, nc, MAX_KEY, key_histogram ,offset);
@@ -105,5 +105,4 @@ void int_sort (int cid, int nc, int siz, data_t key_array[] ) {
 	cumulative_sum_2( cid, nc, MAX_KEY, key_histogram ,offset);	
     barrier(nc);        
 	sort_keys (cid, nc, siz, key_array, key_buff, key_histogram,offset );
-    barrier(nc);        
 }

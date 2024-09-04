@@ -5,27 +5,16 @@
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 // Includes 
-#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
 
-//--------------------------------------------------------------------------
-// Input/Reference Data
 #include "dataset.h"
 #include "somier.h"
 
-//--------------------------------------------------------------------------
-// Basic Utilities and Multi-thread Support
 #include "util.h"
 #include "double_cmp.h"
- 
-//--------------------------------------------------------------------------
-// Verification function
-extern int  __attribute__((noinline)) mt_verify(const size_t coreid, const size_t ncores,const size_t lda , data_t* test,   data_t* verify );
 
-//--------------------------------------------------------------------------
-// somier function
 void somier_scalar (int cid, int nc) {
     compute_forces(cid, nc, N, X, F);
     barrier(nc);   
@@ -40,12 +29,11 @@ void somier_scalar (int cid, int nc) {
     compute_stats(cid, nc, N, X, Xcenter);
     barrier(nc);   
 }
+/*
+ *
+ */
 
-//--------------------------------------------------------------------------
-// main function
-  
 int main(int argc, char** argv) {
-   
     uint32_t cid = argv[0][0];
     uint32_t nc  = argv[0][1];
    
@@ -59,16 +47,9 @@ int main(int argc, char** argv) {
     barrier(nc);   
      
     stats(somier_scalar(cid,nc); barrier(nc), N); // ROI
-    barrier(nc); // ROI sync   
- 
-	if(cid==0) { 
-		int res = verify_Double(3,Xcenter,Xcenter_ref);
-		if(res){
-		    printf("Verification failed!\n");
-    		exit(res);  
-    	}	
-	}
-    barrier(nc);   
     
-   exit(0);    
+    int res=0; 
+	if(cid == 0) res = verify_Double(3,Xcenter,Xcenter_ref);
+    
+    exit(res);    
 }

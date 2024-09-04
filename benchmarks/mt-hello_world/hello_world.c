@@ -7,6 +7,7 @@
  * -----------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "uart.h"
 #include "util.h"
 
@@ -14,6 +15,8 @@ int main(int argc, char ** argv) {
 
     uint32_t cid = argv[0][0];
     uint32_t nc  = argv[0][1];
+
+    volatile static uint32_t core_sync = 0;
 
     if(cid==0) 
     {
@@ -28,14 +31,13 @@ int main(int argc, char ** argv) {
     }
     barrier(nc);
 
-    for(int i=0; i<nc; i++)
-    {
-        if(cid==i) printf("I am the core No. %d: hello world!. \n",cid);
-        barrier(nc);
-    }
+    while(cid != core_sync);    
     
+    printf("I am the core No. %d: hello world!. \n",cid);
     
-    return 0;
+    ATOMIC_OP(core_sync, 1, add, w);
+    
+    exit (0);
 }
 
 

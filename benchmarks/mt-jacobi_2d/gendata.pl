@@ -33,7 +33,7 @@ sub usage()
   print "  --help  print this message\n";
   print "  --size  size of input data [1000]\n";
   print "  --seed  random seed [1]\n";
-  print "  --Dtype Data type [int] , float, double\n";
+  print "  --Dtype Data type [double] , float \n";
   print "$usageMsg";
 
   exit();
@@ -48,7 +48,7 @@ sub processCommandLine()
   $opts{"Dtype"} = "double";
   Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i', 'Dtype:s' ) or usage();
   $opts{"help"} and usage();
-  my @types=('double','int','float');
+  my @types=('double','float');
   unless ( grep( /^$opts{Dtype}$/, @types ) ) {
      print "Error: $opts{Dtype} is an unsupported data type. Valid values are @types\n";
      exit ();
@@ -68,7 +68,7 @@ sub printArray
   my $numCols = 20;
   my $arrayLen = scalar(@{$arrayRef});
 
-  print "static data_t ".$arrayName."[ARRAY_SIZE] __attribute__((aligned (1024))) = \n";
+  print "static data_t ".$arrayName."[ARRAY_SIZE] = \n";
   print "{\n";
 
   if ( $arrayLen <= $numCols ) {
@@ -100,7 +100,7 @@ sub printArray
       print "  ";
       for ( my $i = 0; $i < ($arrayLen-($numRows*$numCols)); $i++ ) {
         my $index = $numCols*$numRows + $i;
-        print sprintf("%3f",$arrayRef->[$index]);
+        print sprintf("%f",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print ", ";
         }
@@ -199,13 +199,14 @@ sub main()
     }
   }
 
-  print "\n#ifndef __DATASET_H";
-  print "\n#define __DATASET_H";
-  print "\n\#define ARRAY_SIZE ".($opts{"size"}*$opts{"size"})." \n\n";
-  print "\n\#define DIM_SIZE ".$opts{"size"}." \n\n";
+  print "#ifndef __DATASET_H \n";
+  print "#define __DATASET_H \n\n";
+
+  print "#define ARRAY_SIZE ".($opts{"size"}*$opts{"size"})." \n";
+  print "#define DIM_SIZE ".$opts{"size"}." \n\n";
   
-  print "\n\#define DATA_TYPE\n"; 
-  print "typedef $opts{Dtype} data_t;\n";
+  print "#define DATA_TYPE\n"; 
+  print "typedef $opts{Dtype} data_t;\n\n";
     
    
   printArray( "input1_data", \@values1 );
@@ -213,7 +214,7 @@ sub main()
   printArray( "verify_data1", \@results1);
   printArray( "verify_data2", \@results2);
 
-  print "\n#endif //__DATASET_H";
+  print "#endif //__DATASET_H \n\n";
  
 }
 

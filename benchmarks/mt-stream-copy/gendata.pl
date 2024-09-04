@@ -33,7 +33,7 @@ sub usage()
   print "  --help  print this message\n";
   print "  --size  size of input data [1000]\n";
   print "  --seed  random seed [1]\n";
-  print "  --Dtype Data type [double] , float, int\n";
+  print "  --Dtype Data type [double] , float, int, long\n";
   print "$usageMsg";
 
   exit();
@@ -49,7 +49,7 @@ sub processCommandLine()
   Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i', 'Dtype:s' ) or usage();
   $opts{"help"} and usage();
   
-  my @types=('double','int','float');
+  my @types=('double','int','float','long');
   unless ( grep( /^$opts{Dtype}$/, @types ) ) {
      print "Error: $opts{Dtype} is an unsupported data type. Valid values are @types\n";
      exit ();
@@ -75,7 +75,7 @@ sub printArray
   if ( $arrayLen <= $numCols ) {
     print  "  ";
     for ( my $i = 0; $i < $arrayLen; $i++ ) {
-      print  sprintf("%g",$arrayRef->[$i]);
+      print  sprintf("%3d",$arrayRef->[$i]);
       if ( $i != $arrayLen-1 ) {
         print  ", ";
       }
@@ -89,7 +89,7 @@ sub printArray
       print  "  ";
       for ( my $i = 0; $i < $numCols; $i++ ) {
         my $index = $j*$numCols + $i;
-        print  sprintf("%g",$arrayRef->[$index]);
+        print  sprintf("%3d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print  ", ";
         }
@@ -101,7 +101,7 @@ sub printArray
       print  "  ";
       for ( my $i = 0; $i < ($arrayLen-($numRows*$numCols)); $i++ ) {
         my $index = $numCols*$numRows + $i;
-        print  sprintf("%g",$arrayRef->[$index]);
+        print  sprintf("%3d",$arrayRef->[$index]);
         if ( $index != $arrayLen-1 ) {
           print  ", ";
         }
@@ -142,13 +142,10 @@ sub stream_copy_block {
 
 sub main()
 {
-
- 
+  
   my $in_max =500; #should be int
   processCommandLine();
   srand($opts{"seed"});
- 
-
 
   my @X;
   my @Y;
@@ -161,9 +158,9 @@ sub main()
   my $z;
   
   for ( my $i = 0; $i < $opts{"size"}; $i++ ) {   
-      $x->[$i] = int(rand($in_max));
-      $y->[$i] = int(rand($in_max));  
-      $z->[$i] = int(rand($in_max));  
+      $x->[$i] = int(rand((1<<31)-1));
+      $y->[$i] = int(rand((1<<31)-1));  
+      $z->[$i] = int(rand((1<<31)-1));  
       push( @X, $x->[$i] );
       push( @Y, $y->[$i] ); 
       push( @Z, $z->[$i] );   
@@ -177,21 +174,20 @@ sub main()
       push( @R, $r->[$i] );
   }
 
+  print  "#ifndef __DATASET_H \n";
+  print  "#define __DATASET_H \n\n";
   
-
-  print  "\n#ifndef __DATASET_H";
-  print  "\n#define __DATASET_H";
-  print  "\n\#define ARRAY_SIZE ".($opts{"size"})." \n";
+  print  "#define ARRAY_SIZE ".($opts{"size"})." \n\n";
  
-  print  "\n\#define DATA_TYPE\n";  
-  print  "\ntypedef $opts{Dtype} data_t;\n";
+  print  "#define DATA_TYPE\n";  
+  print  "typedef $opts{Dtype} data_t;\n\n";
 
 
   printArray( "input1_data", \@X );
   printArray( "input2_data", \@Y );
   printArray( "verify_data", \@R);
 
-  print  "\n#endif //__DATASET_H";
+  print  "#endif //__DATASET_H \n";
  
 }
 

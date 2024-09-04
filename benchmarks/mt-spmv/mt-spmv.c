@@ -6,7 +6,7 @@
 #include "util.h"
 #include "double_cmp.h"
 
-void __attribute__((noinline)) spmv(const size_t coreid, const size_t ncores, const size_t lda, long ptr[], long col[], data_t val[], data_t x[], data_t y[]);
+void __attribute__((noinline)) spmv(const size_t coreid, const size_t ncores, const size_t lda, long *ptr, long *col, data_t *val, data_t *x, data_t *y);
 extern int mt_verify(const size_t coreid, const size_t ncores, const size_t lda, data_t* test, data_t* verify);
 
 /* 
@@ -22,22 +22,17 @@ int main(int argc, char** argv)
     barrier(nc);        
 
     stats(spmv(cid,nc,NROW,ptr,col,val,x,y);barrier(nc),NNZ); // ROI
-    barrier(nc); // barrier to ROI sync
   
     int res = mt_verify(cid,nc,NROW,y,ref);
-    barrier(nc);        
-    
-    if(res){
-        printf("Core %d: Verification failed!\n",cid);
-        exit(res);  
-    }
        
-    exit(0);
+    exit(res);
 }
+
 /*   
  *
  */
-void spmv(const size_t coreid, const size_t ncores, const size_t lda, long ptr[], long col[], data_t val[], data_t x[], data_t y[]){
+
+void spmv(const size_t coreid, const size_t ncores, const size_t lda, long *ptr, long *col, data_t *val, data_t *x, data_t *y){
     
     size_t i, k, block, start, end;
     
