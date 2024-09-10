@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "inputs/spm0.h"
 
 #include "util.h"
 #include "double_cmp.h"
 
-void __attribute__((noinline)) spmv(const size_t coreid, const size_t ncores, const size_t lda, long *ptr, long *col, data_t *val, data_t *x, data_t *y);
+void __attribute__((noinline)) spmv(const size_t coreid, const size_t ncores, const size_t lda, uint64_t *ptr, uint64_t *col, data_t *val, data_t *x, data_t *y);
 extern int mt_verify(const size_t coreid, const size_t ncores, const size_t lda, data_t* test, data_t* verify);
 
 /* 
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
  *
  */
 
-void spmv(const size_t coreid, const size_t ncores, const size_t lda, long *ptr, long *col, data_t *val, data_t *x, data_t *y){
+void spmv(const size_t coreid, const size_t ncores, const size_t lda, uint64_t *ptr, uint64_t *col, data_t *val, data_t *x, data_t *y){
     
     size_t i, k, block, start, end;
     
