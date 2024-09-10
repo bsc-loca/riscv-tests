@@ -107,7 +107,15 @@ Available Benchmarks
 | nv1        | 75468  | 75468  | 2449194 | [Link](https://sparse.tamu.edu/VLSI/nv1) | 39 MB |
 | poisson3Db | 85623  | 85623  | 2374949 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/FEMLAB/poisson3Db.html) | 38 MB |
 | bcsstk39   | 46772  | 46772  | 1068033 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Boeing/bcsstk39.html) | 17 MB |
+| bcsstk35   | 30237  | 30237  | 740200  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Boeing/bcsstk35.html) | 12 MB |
 | Lin        | 256000 | 256000 | 1011200 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Lin/Lin.html) | 21 MB |
+| appu       | 14000  | 14000  | 1853104 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Simon/appu.html) | 28 MB |
+| venkat25   | 62424  | 62424  | 1717763 | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Simon/venkat25.html) | 27 MB |
+| nemeth24   | 9506   | 9506   | 758028  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Nemeth/nemeth24.html) | 11 MB |
+| SiO        | 33401  | 33401  | 675528  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/PARSEC/SiO.html) | 11 MB |
+| Na5        | 5832   | 5832   | 155731  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/PARSEC/Na5.html) | 2.5 MB |
+| crystk01   | 4875   | 4875   | 160383  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Boeing/crystk01.html) | 2.5 MB |
+| lhr07      | 7337   | 7337   | 156508  | [Link](https://www.cise.ufl.edu/research/sparse/matrices/Mallya/lhr07.html) | 2.5 MB |
 
   
    
