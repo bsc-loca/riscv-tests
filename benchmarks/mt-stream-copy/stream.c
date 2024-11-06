@@ -13,7 +13,7 @@ void tuned_STREAM_Copy(const size_t coreid, const size_t ncores,const size_t lda
     if ((block*ncores) != lda) block++;
     start = block * coreid;
     end   = start + block;
-    if (end > lda) return; //should assert error instead
+    if (end > lda) end = lda;
        
     size_t j;
     for (j=start; j<end; j++)
@@ -29,7 +29,7 @@ void tuned_STREAM_Scale(const size_t coreid, const size_t ncores,const size_t ld
     if ((block*ncores) != lda) block++;
     start = block * coreid;
     end   = start + block;
-    if (end > lda) return; //should assert error instead
+    if (end > lda) end = lda;
        
     size_t j;
 	for (j=start; j<end; j++)
@@ -44,7 +44,7 @@ void tuned_STREAM_Add(const size_t coreid, const size_t ncores,const size_t lda 
     if ((block*ncores) != lda) block++;
     start = block * coreid;
     end   = start + block;
-    if (end > lda) return; //should assert error instead
+    if (end > lda) end = lda;
        
     size_t j;
 	for (j=start; j<end; j++)
@@ -59,7 +59,7 @@ void tuned_STREAM_Triad(const size_t coreid, const size_t ncores,const size_t ld
     if ((block*ncores) != lda) block++;
     start = block * coreid;
     end   = start + block;
-    if (end > lda) return; //should assert error instead
+    if (end > lda) end = lda;
        
     size_t j;
 	for (j=start; j<end; j++)
