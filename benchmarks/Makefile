@@ -56,7 +56,7 @@ bmarks = 			\
 RISCV_PREFIX ?= riscv$(XLEN)-unknown-elf-
 RISCV_GCC ?= $(RISCV_PREFIX)gcc
 
-RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -march=rv64imafd -mabi=lp64d 
+RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -march=rv64imafd -mabi=lp64d -Wno-implicit-int -Wno-implicit-function-declaration -Wno-incompatible-pointer-types
 RISCV_GCC_OPTS += $(GCC_OPT) $(TARGET) 
 RISCV_LINK ?= $(RISCV_GCC) -T $(src_dir)/common/test.ld $(incs)
 RISCV_LINK_OPTS ?= -static -nostdlib -nostartfiles -lm -lc -lgcc -specs=nano.specs -specs=nosys.specs -T $(src_dir)/common/test.ld
