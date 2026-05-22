@@ -47,7 +47,8 @@ bmarks = \
 	spmv_fp \
 	hello \
 	acdc_conflicts \
-	coremark
+	coremark \
+	rgb2yuv
 
 #--------------------------------------------------------------------
 # Build rules
