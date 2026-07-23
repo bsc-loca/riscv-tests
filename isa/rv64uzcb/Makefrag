@@ -1,0 +1,9 @@
+#=======================================================================
+# Makefrag for rv64uzcb tests
+#-----------------------------------------------------------------------
+
+rv64uzcb_sc_tests = \
+	zcb \
+
+rv64uzcb_p_tests = $(addprefix rv64uzcb-p-, $(rv64uzcb_sc_tests))
+rv64uzcb_v_tests = $(addprefix rv64uzcb-v-, $(rv64uzcb_sc_tests))

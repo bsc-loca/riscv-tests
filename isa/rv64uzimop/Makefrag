@@ -1,0 +1,9 @@
+#=======================================================================
+# Makefrag for rv64uzimop tests
+#-----------------------------------------------------------------------
+
+rv64uzimop_sc_tests = \
+	zimop \
+
+rv64uzimop_p_tests = $(addprefix rv64uzimop-p-, $(rv64uzimop_sc_tests))
+rv64uzimop_v_tests = $(addprefix rv64uzimop-v-, $(rv64uzimop_sc_tests))
